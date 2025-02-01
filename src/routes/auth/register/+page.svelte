@@ -143,7 +143,7 @@
 			> <span class="text-red-500">*</span>
 		</Checkbox>
 		<Button type="submit" class="bg-primary-500 w-full">Register</Button>
-		<A href="/" class="text-primary-500 dark:text-primary-600 block text-center hover:underline"
+		<A href="/auth" class="text-primary-500 dark:text-primary-600 block text-center hover:underline"
 			>Already have an account ?</A
 		>
 	</form>

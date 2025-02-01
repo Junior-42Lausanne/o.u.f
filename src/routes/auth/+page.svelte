@@ -53,6 +53,6 @@
 		</div>
 		<Button type="submit" class="w-full">Login</Button>
 		<A href="/forgot-password" class="hover:underline text-center block">Forgot password?</A>
-		<A href="/register" class="hover:underline text-center block">Create an account</A>
+		<A href="/auth/register" class="hover:underline text-center block">Create an account</A>
 	</form>
 </div>
