@@ -5,7 +5,6 @@
 	const { supabase } = data;
 
 	let email = $state('');
-	let password = $state('');
 	let errorMessage = $state('');
 	let successMessage = $state('');
 
@@ -13,20 +12,17 @@
 		event.preventDefault();
 
 		try {
-			const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-				email,
-				password,
+			const { data: forgotPasswordData, error: forgotPasswordError } = await supabase.auth.resetPasswordForEmail(email, {
+				redirectTo: window.location.origin + '/auth/reset-password',
 			});
 
-			if (signInError) {
-				errorMessage = signInError.message;
+			if (forgotPasswordError) {
+				errorMessage = forgotPasswordError.message;
 				return;
 			}
 
-			successMessage = 'You have successfully signed in, redirecting...';
-			setTimeout(() => {
-				window.location.href = '/dashboard';
-			}, 1000);
+			successMessage = 'An email has been sent to you with instructions to reset your password';
+			errorMessage = '';
 		} catch (err) {
 			errorMessage = 'An error occurred while trying to sign in';
 			console.error(err);
@@ -35,7 +31,7 @@
 </script>
 
 <div class="flex h-screen flex-col items-center justify-center">
-	<h1 class="text-4xl font-bold">Login</h1>
+	<h1 class="text-4xl font-bold">Password forgotten</h1>
 	<form action="#" onsubmit={handleFormSubmit} class="mt-6 w-full max-w-sm">
 		{#if errorMessage}
 			<p class="text-red-500 mb-4">{errorMessage}</p>
@@ -47,12 +43,8 @@
 			<Label for="email" class="mb-2">Email address</Label>
 			<Input type="email" id="email" placeholder="john.doe@company.com" required bind:value={email} />
 		</div>
-		<div class="mb-6">
-			<Label for="password" class="mb-2">Password</Label>
-			<Input type="password" id="password" placeholder="•••••••••" required bind:value={password} />
-		</div>
-		<Button type="submit" class="w-full">Login</Button>
-		<A href="/auth/forgot-password" class="hover:underline text-center block">Forgot password?</A>
+		<Button type="submit" class="w-full">Recover password</Button>
+		<A href="/auth" class="hover:underline text-center block">Go back to the login page</A>
 		<A href="/auth/register" class="hover:underline text-center block">Create an account</A>
 	</form>
 </div>
