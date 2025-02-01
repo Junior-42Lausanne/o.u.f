@@ -134,16 +134,16 @@
 			/>
 		</div>
 		<Checkbox class="mb-6 space-x-1 rtl:space-x-reverse" required bind:checked={join_network}>
-			Join the <A href="#" class="text-primary-500 dark:text-primary-600 hover:underline">7 Billion Urbanists Network</A
+			Join the <A href="#" class="hover:underline">7 Billion Urbanists Network</A
 			>
 		</Checkbox>
 		<Checkbox class="mb-2 space-x-1 rtl:space-x-reverse" required bind:checked={cgu}>
-			I agree with the <A href="/cgu" class="text-primary-500 dark:text-primary-600 hover:underline"
+			I agree with the <A href="/cgu" class="hover:underline"
 				>terms and conditions</A
 			> <span class="text-red-500">*</span>
 		</Checkbox>
-		<Button type="submit" class="bg-primary-500 w-full">Register</Button>
-		<A href="/auth" class="text-primary-500 dark:text-primary-600 block text-center hover:underline"
+		<Button type="submit" class="w-full">Register</Button>
+		<A href="/auth" class="block text-center hover:underline"
 			>Already have an account ?</A
 		>
 	</form>
