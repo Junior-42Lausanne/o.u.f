@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Input, Label, Helper, Button, Checkbox, A } from 'flowbite-svelte';
+	import { onMount } from 'svelte';
 
 	const { data } = $props();
 	const { supabase } = data;
