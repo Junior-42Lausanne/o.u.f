@@ -23,7 +23,7 @@ BEGIN
     RETURN EXISTS (
         SELECT 1
         FROM public.profiles
-        WHERE profiles.id = auth.uid()
+        WHERE profiles.id = (select auth.uid())
         AND profiles.is_admin = TRUE
     );
 END;
@@ -39,31 +39,31 @@ ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Select profiles for superadmin and owner" ON public.profiles
 FOR SELECT
 USING (
-    is_superadmin() OR auth.uid() = id
+    is_superadmin() OR (select auth.uid()) = id
 );
 
 -- Policy for INSERT
 CREATE POLICY "Insert for superadmin and owner" ON public.profiles
 FOR INSERT
 WITH CHECK (
-    is_superadmin() OR auth.uid() = id
+    is_superadmin() OR (select auth.uid()) = id
 );
 
 -- Policy for UPDATE
 CREATE POLICY "Update for superadmin and owner" ON public.profiles
 FOR UPDATE
 USING (
-    is_superadmin() OR auth.uid() = id
+    is_superadmin() OR (select auth.uid()) = id
 )
 WITH CHECK (
-    is_superadmin() OR auth.uid() = id
+    is_superadmin() OR (select auth.uid()) = id
 );
 
 -- Policy for DELETE
 CREATE POLICY "Delete for superadmin and owner" ON public.profiles
 FOR DELETE
 USING (
-    is_superadmin() OR auth.uid() = id
+    is_superadmin() OR (select auth.uid()) = id
 );
 
 -- Create a trigger function to enforce the rule
