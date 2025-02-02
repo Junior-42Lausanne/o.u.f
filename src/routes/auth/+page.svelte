@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Input, Label, Helper, Button, Checkbox, A } from 'flowbite-svelte';
+  import i18n from '$lib/i18n';
 
 	const { data } = $props();
 	const { supabase } = data;
@@ -19,23 +20,23 @@
 			});
 
 			if (signInError) {
-				errorMessage = signInError.message;
+				errorMessage = signInError.message; // Fixme: Show proper error message based on error code
 				return;
 			}
 
-			successMessage = 'You have successfully signed in, redirecting...';
+			successMessage = $i18n.t('auth.success_sign_in');
 			setTimeout(() => {
 				window.location.href = '/dashboard';
 			}, 1000);
 		} catch (err) {
-			errorMessage = 'An error occurred while trying to sign in';
+			errorMessage = $i18n.t('auth.error_sign_in');
 			console.error(err);
 		}
 	}
 </script>
 
 <div class="flex h-screen flex-col items-center justify-center">
-	<h1 class="text-4xl font-bold">Login</h1>
+	<h1 class="text-4xl font-bold">{$i18n.t('auth.title')}</h1>
 	<form action="#" onsubmit={handleFormSubmit} class="mt-6 w-full max-w-sm">
 		{#if errorMessage}
 			<p class="text-red-500 mb-4">{errorMessage}</p>
@@ -44,15 +45,19 @@
 			<p class="text-green-500 mb-4">{successMessage}</p>
 		{/if}
 		<div class="mb-6">
-			<Label for="email" class="mb-2">Email address</Label>
-			<Input type="email" id="email" placeholder="john.doe@company.com" required bind:value={email} />
+			<Label for="email" class="mb-2">{$i18n.t('auth.email_label')}</Label>
+			<Input type="email" id="email" placeholder={$i18n.t('auth.email_placeholder')} required bind:value={email} />
 		</div>
 		<div class="mb-6">
-			<Label for="password" class="mb-2">Password</Label>
+			<Label for="password" class="mb-2">{$i18n.t('auth.password_label')}</Label>
 			<Input type="password" id="password" placeholder="•••••••••" required bind:value={password} />
 		</div>
-		<Button type="submit" class="w-full">Login</Button>
-		<A href="/auth/forgot-password" class="hover:underline text-center block">Forgot password?</A>
-		<A href="/auth/register" class="hover:underline text-center block">Create an account</A>
+		<Button type="submit" class="w-full">{$i18n.t('auth.login_button')}</Button>
+		<A href="/auth/forgot-password" class="hover:underline text-center block">{$i18n.t('auth.forgot_password_link')}</A>
+		<A href="/auth/register" class="hover:underline text-center block">{$i18n.t('auth.create_an_account_link')}</A>
 	</form>
 </div>
+
+<svelte:head>
+	<title>{$i18n.t('auth.tab_title')}</title>
+</svelte:head>

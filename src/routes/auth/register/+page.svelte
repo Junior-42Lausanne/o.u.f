@@ -2,6 +2,7 @@
 	import { invalidate } from '$app/navigation';
 	import { Input, Label, Helper, Button, Checkbox, A } from 'flowbite-svelte';
 	import { z } from 'zod';
+  import i18n from '$lib/i18n';
 
 	const { data } = $props();
 	const { supabase } = data;
@@ -24,23 +25,23 @@
 
 		const result = z
 			.object({
-				email: z.string().email('Invalid email address'),
-				password: z.string().min(8, 'Password must be at least 8 characters'),
+				email: z.string().email($i18n.t('auth.register.error_email')),
+				password: z.string().min(8, $i18n.t('auth.register.error_password_length')),
 				password2: z
 					.string()
 					.min(8)
 					.refine((data) => data === password, {
-						message: 'Passwords do not match'
+						message: $i18n.t('auth.register.error_password_match')
 					}),
 				cgu: z
 					.boolean()
 					.refine((data) => data === true, {
-						message: 'You must agree to the terms and conditions'
+						message: $i18n.t('auth.register.error_cgu')
 					}),
-				first_name: z.string().min(2, 'First name must be at least 2 characters'),
-				last_name: z.string().min(2, 'Last name must be at least 2 characters'),
-				activity: z.string().min(2, 'Activity must be at least 2 characters'),
-				work_link: z.string().url('Invalid URL').optional()
+				first_name: z.string().min(2, $i18n.t('auth.register.error_first_name')),
+				last_name: z.string().min(2, $i18n.t('auth.register.error_last_name')),
+				activity: z.string().min(2, $i18n.t('auth.register.error_activity')),
+				work_link: z.string().url($i18n.t('auth.register.error_invalid_worklink')).optional()
 			})
 			.safeParse({ email, password, password2, cgu, first_name, last_name, activity, work_link });
 
@@ -65,25 +66,25 @@
 			});
 
 			if (signUpError) {
-				errorMessage = 'An error occurred while trying to sign up';
+				errorMessage = $i18n.t('auth.register.error_sign_up');
 				console.error(signUpError);
 				return;
 			}
 
-			successMessage = 'You have successfully signed up, redirecting...';
+			successMessage = $i18n.t('auth.register.success_sign_up');
 			errorMessage = '';
 			setTimeout(() => {
 				window.location.href = '/';
 			}, 1000);
 		} catch (err) {
-			errorMessage = 'An error occurred while trying to sign up';
+			errorMessage = $i18n.t('auth.register.error_sign_up');
 			console.error(err);
 		}
 	}
 </script>
 
 <div class="flex h-screen flex-col items-center justify-center">
-	<h1 class="text-4xl font-bold">Register</h1>
+	<h1 class="text-4xl font-bold">{$i18n.t('auth.register.title')}</h1>
 	<form action="#" onsubmit={handleFormSubmit} class="mt-6 w-full max-w-sm">
 		{#if errorMessage}
 			<p class="mb-4 text-red-500">{errorMessage}</p>
@@ -92,37 +93,37 @@
 			<p class="mb-4 text-green-500">{successMessage}</p>
 		{/if}
 		<div class="mb-6">
-			<Label for="first_name" class="mb-2">First name <span class="text-red-500">*</span></Label>
-			<Input type="text" id="first_name" placeholder="John" required bind:value={first_name} />
+			<Label for="first_name" class="mb-2">{$i18n.t('auth.register.first_name_label')} <span class="text-red-500">*</span></Label>
+			<Input type="text" id="first_name" placeholder={$i18n.t('auth.register.first_name_placeholder')} required bind:value={first_name} />
 		</div>
 		<div class="mb-6">
-			<Label for="last_name" class="mb-2">Last name <span class="text-red-500">*</span></Label>
-			<Input type="text" id="last_name" placeholder="Doe" required bind:value={last_name} />
+			<Label for="last_name" class="mb-2">{$i18n.t('auth.register.last_name_label')} <span class="text-red-500">*</span></Label>
+			<Input type="text" id="last_name" placeholder={$i18n.t('auth.register.last_name_placeholder')} required bind:value={last_name} />
 		</div>
 		<div class="mb-6">
-			<Label for="activity" class="mb-2">Activity <span class="text-red-500">*</span></Label>
-			<Input type="text" id="activity" placeholder="" required bind:value={activity} />
+			<Label for="activity" class="mb-2">{$i18n.t('auth.register.activity_label')} <span class="text-red-500">*</span></Label>
+			<Input type="text" id="activity" placeholder={$i18n.t('auth.register.activity_placeholder')} required bind:value={activity} />
 		</div>
 		<div class="mb-6">
-			<Label for="work_link" class="mb-2">Work link (linkedin, website, ...)</Label>
-			<Input type="text" id="work_link" placeholder="https://..." bind:value={work_link} />
+			<Label for="work_link" class="mb-2">{$i18n.t('auth.register.work_link_label')}</Label>
+			<Input type="text" id="work_link" placeholder={$i18n.t('auth.register.work_link_placeholder')} bind:value={work_link} />
 		</div>
 		<div class="mb-6">
-			<Label for="email" class="mb-2">Email address <span class="text-red-500">*</span></Label>
+			<Label for="email" class="mb-2">{$i18n.t('auth.register.email_label')} <span class="text-red-500">*</span></Label>
 			<Input
 				type="email"
 				id="email"
-				placeholder="john.doe@company.com"
+				placeholder={$i18n.t('auth.register.email_placeholder')}
 				required
 				bind:value={email}
 			/>
 		</div>
 		<div class="mb-6">
-			<Label for="password" class="mb-2">Password <span class="text-red-500">*</span></Label>
+			<Label for="password" class="mb-2">{$i18n.t('auth.register.password_label')} <span class="text-red-500">*</span></Label>
 			<Input class="placeholder:text-gray-400" type="password" id="password" placeholder="•••••••••" required bind:value={password} />
 		</div>
 		<div class="mb-6">
-			<Label for="password" class="mb-2">Confirm password <span class="text-red-500">*</span></Label
+			<Label for="password" class="mb-2">{$i18n.t('auth.register.confirm_password_label')} <span class="text-red-500">*</span></Label
 			>
 			<Input
 				class="placeholder:text-gray-400"
@@ -134,17 +135,21 @@
 			/>
 		</div>
 		<Checkbox class="mb-6 space-x-1 rtl:space-x-reverse" required bind:checked={join_network}>
-			Join the <A href="#" class="hover:underline">7 Billion Urbanists Network</A
+			{$i18n.t('auth.register.join_7_billion_urbanists_network')} <A href="#" class="hover:underline">7 Billion Urbanists Network</A
 			>
 		</Checkbox>
 		<Checkbox class="mb-2 space-x-1 rtl:space-x-reverse" required bind:checked={cgu}>
-			I agree with the <A href="/cgu" class="hover:underline"
-				>terms and conditions</A
+			{$i18n.t('auth.register.agree_with_cgu')}<A href="/cgu" class="hover:underline"
+				>{$i18n.t('auth.register.agree_with_cgu_link')}</A
 			> <span class="text-red-500">*</span>
 		</Checkbox>
-		<Button type="submit" class="w-full">Register</Button>
+		<Button type="submit" class="w-full">{$i18n.t('auth.register.register_button')}</Button>
 		<A href="/auth" class="block text-center hover:underline"
-			>Already have an account ?</A
+			>{$i18n.t('auth.register.already_have_account_link')}</A
 		>
 	</form>
 </div>
+
+<svelte:head>
+	<title>{$i18n.t('auth.register.tab_title')}</title>
+</svelte:head>
