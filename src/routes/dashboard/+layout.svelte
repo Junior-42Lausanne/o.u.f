@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { invalidate } from '$app/navigation';
   import { Navbar, NavBrand, NavLi, NavUl, NavHamburger, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider } from 'flowbite-svelte';
+  import i18n from '$lib/i18n';
 
 	const { data, children } = $props();
 	const { supabase, profile } = data;
@@ -8,7 +9,7 @@
 	async function signOut() {
 		const { error } = await supabase.auth.signOut();
 		if (error) {
-			console.error('An error occurred while trying to sign out');
+			console.error($i18n.t('dashboard.layout.sign_out_error', { error }));
 			return;
 		}
 		invalidate('supabase:auth');
@@ -36,9 +37,9 @@
 				<span class="block text-sm">{profile.first_name} {profile.last_name}</span>
 				<span class="block truncate text-sm font-medium">{profile.email}</span>
 			</DropdownHeader>
-			<DropdownItem href="/dashboard/settings">Settings</DropdownItem>
+			<DropdownItem href="/dashboard/settings">{$i18n.t('dashboard.layout.navbar_settings_link')}</DropdownItem>
 			<DropdownDivider />
-			<DropdownItem onclick={signOut}>Sign out</DropdownItem>
+			<DropdownItem onclick={signOut}>{$i18n.t('dashboard.layout.navbar_sign_out_link')}</DropdownItem>
 		</Dropdown>
 	</Navbar>
 

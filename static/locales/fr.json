@@ -51,5 +51,12 @@
       "already_have_account_link": "",
       "tab_title": ""
     }
+  },
+  "dashboard": {
+    "layout": {
+      "sign_out_error": "",
+      "navbar_settings_link": "",
+      "navbar_sign_out_link": ""
+    }
   }
 }

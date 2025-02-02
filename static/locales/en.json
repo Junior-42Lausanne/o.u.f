@@ -51,5 +51,12 @@
       "already_have_account_link": "I already have an account",
       "tab_title": "Register"
     }
+  },
+  "dashboard": {
+    "layout": {
+      "sign_out_error": "There was an error signing you out, please try again.",
+      "navbar_settings_link": "Settings",
+      "navbar_sign_out_link": "Sign out",
+    }
   }
 }
