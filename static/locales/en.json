@@ -56,7 +56,7 @@
     "layout": {
       "sign_out_error": "There was an error signing you out, please try again.",
       "navbar_settings_link": "Settings",
-      "navbar_sign_out_link": "Sign out",
+      "navbar_sign_out_link": "Sign out"
     }
   }
 }
