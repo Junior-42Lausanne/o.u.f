@@ -40,7 +40,7 @@ CREATE POLICY "Select profiles for superadmin and owner" ON public.profiles
 FOR SELECT
 USING (
     is_superadmin() OR (select auth.uid()) = id
-);
+); -- TODO: Add a conditions so users in the same projects can see each other
 
 -- Policy for INSERT
 CREATE POLICY "Insert for superadmin and owner" ON public.profiles

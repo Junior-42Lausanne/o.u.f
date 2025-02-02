@@ -102,21 +102,21 @@ export type Database = {
         Row: {
           created_at: string
           email: string
-          id: string
+          id: number
           invited_by: string
           project_id: number
         }
         Insert: {
           created_at?: string
           email: string
-          id: string
+          id?: never
           invited_by: string
           project_id: number
         }
         Update: {
           created_at?: string
           email?: string
-          id?: string
+          id?: never
           invited_by?: string
           project_id?: number
         }
@@ -185,7 +185,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          id: number
+          id?: never
           languages?: string[]
           name: string
           owner_id: string
@@ -195,7 +195,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          id?: number
+          id?: never
           languages?: string[]
           name?: string
           owner_id?: string

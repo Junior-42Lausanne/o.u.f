@@ -7,7 +7,7 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
 
 	const { data: profile, error: profileError } = await supabase
 		.from('profiles')
-		.select('*')
+		.select('*, projects(*, users:project_users(*, profile:profiles!inner(*)), invites:project_invites(*), owner:profiles!inner(*))')
 		.eq('id', user.id)
 		.single();
 	if (profileError) throw profileError;
