@@ -35,12 +35,29 @@ ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 -- Enable Row Level Security
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
--- Policy for SELECT (read)
-CREATE POLICY "Select profiles for superadmin and owner" ON public.profiles
+-- Remove existing SELECT policy
+DROP POLICY IF EXISTS "Select profiles for superadmin and owner" ON public.profiles;
+
+-- Create updated policy with project membership check
+CREATE POLICY "Select profiles for superadmin, owner, and project members" 
+ON public.profiles
 FOR SELECT
 USING (
-    is_superadmin() OR (select auth.uid()) = id
-); -- TODO: Add a conditions so users in the same projects can see each other
+    is_superadmin() OR 
+    (SELECT auth.uid()) = id OR
+    EXISTS (
+        SELECT 1
+        FROM public.projects p
+        LEFT JOIN public.project_users pu_current ON p.id = pu_current.project_id
+        LEFT JOIN public.project_users pu_target ON p.id = pu_target.project_id
+        WHERE 
+            -- Current user is project owner or member
+            (p.owner_id = (SELECT auth.uid()) OR pu_current.user_id = (SELECT auth.uid()))
+            AND 
+            -- Target user is project owner or member
+            (p.owner_id = profiles.id OR pu_target.user_id = profiles.id)
+    )
+);
 
 -- Policy for INSERT
 CREATE POLICY "Insert for superadmin and owner" ON public.profiles

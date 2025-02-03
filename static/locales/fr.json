@@ -55,8 +55,24 @@
   "dashboard": {
     "layout": {
       "sign_out_error": "",
+      "navbar_home_link": "",
       "navbar_settings_link": "",
       "navbar_sign_out_link": ""
+    },
+    "project_name": "",
+    "url_prefix": "",
+    "users": "",
+    "actions": "",
+    "owner": "",
+    "admin": "",
+    "manage_project_button": "",
+    "create_project_button": "",
+    "project": {
+      "[id]": {
+        "project_settings_link": "",
+        "project_translations_link": "",
+        "project_library_link": ""
+      }
     }
   }
 }

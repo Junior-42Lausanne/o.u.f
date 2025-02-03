@@ -7,11 +7,14 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
 
 	const { data: profile, error: profileError } = await supabase
 		.from('profiles')
-		.select('*, projects(*, users:project_users(*, profile:profiles!inner(*)), invites:project_invites(*), owner:profiles!inner(*))')
+		.select('*')
 		.eq('id', user.id)
 		.single();
 	if (profileError) throw profileError;
 	if (!profile) redirect(302, '/');
 
-	return { profile };
+	const { data: projects, error: projectsError } = await supabase.from('projects').select('*, users:project_users(*, profile:profiles!inner(*)), invites:project_invites(*), owner:profiles!inner(*)');
+	if (projectsError) throw projectsError;
+
+	return { profile, projects };
 };

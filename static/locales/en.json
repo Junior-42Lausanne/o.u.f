@@ -55,8 +55,24 @@
   "dashboard": {
     "layout": {
       "sign_out_error": "There was an error signing you out, please try again.",
+      "navbar_home_link": "Home",
       "navbar_settings_link": "Settings",
       "navbar_sign_out_link": "Sign out"
+    },
+    "project_name": "Project name",
+    "url_prefix": "URL prefix",
+    "users": "Users",
+    "actions": "",
+    "owner": "owner",
+    "admin": "admin",
+    "manage_project_button": "Manage",
+    "create_project_button": "Create a new project",
+    "project": {
+      "[id]": {
+        "project_settings_link": "Settings",
+        "project_translations_link": "Translations",
+        "project_library_link": "Library"
+      }
     }
   }
 }

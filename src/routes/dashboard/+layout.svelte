@@ -18,7 +18,7 @@
 	}
 
 	const menus: {name: string, href: string}[] = [
-		{ name: 'Home', href: '/' },
+		{ name: $i18n.t('dashboard.layout.navbar_home_link'), href: '/dashboard' },
 	]
 </script>
 
@@ -28,7 +28,14 @@
 			<img src="/logo.svg" class="h-12 sm:h-9" alt="Flowbite Logo" />
 			<!-- <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Flowbite</span> -->
 		</NavBrand>
-		<div class="flex items-center md:order-2">
+		<NavUl class="hidden md:flex">
+			{#each menus as menu}
+				<NavLi>
+					<a href={menu.href} class="hover:text-gray-900 dark:hover:text-white">{menu.name}</a>
+				</NavLi>
+			{/each}
+		</NavUl>
+		<div class="flex items-center md:order-3">
 			<Avatar id="avatar-menu" alt="Profile picture" src={profile.avatar || undefined} class="hover:cursor-pointer" />
 			<NavHamburger class="w-full md:w-auto md:order-1" />
 		</div>
@@ -43,5 +50,7 @@
 		</Dropdown>
 	</Navbar>
 
-	{@render children()}
+	<div class="m-8">
+		{@render children()}
+	</div>
 </div>
