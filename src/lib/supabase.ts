@@ -212,8 +212,54 @@ export type Database = {
           },
         ]
       }
+      translations: {
+        Row: {
+          en: string | null
+          fr: string | null
+          id: number
+          key: string
+          project_id: number | null
+        }
+        Insert: {
+          en?: string | null
+          fr?: string | null
+          id?: never
+          key: string
+          project_id?: number | null
+        }
+        Update: {
+          en?: string | null
+          fr?: string | null
+          id?: never
+          key?: string
+          project_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "translations_project_id_fkey"
+            columns: ["project_id"]
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
+      contacts: {
+        Row: {
+          activity: string | null
+          avatar: string | null
+          created_at: string | null
+          email: string | null
+          first_name: string | null
+          id: string | null
+          is_admin: boolean | null
+          join_network: boolean | null
+          last_name: string | null
+          work_link: string | null
+        }
+        Relationships: []
+      }
       user_projects: {
         Row: {
           created_at: string | null

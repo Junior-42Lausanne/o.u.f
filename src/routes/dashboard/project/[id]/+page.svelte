@@ -21,3 +21,7 @@
 		</Card>
 	{/each}
 </div>
+
+<svelte:head>
+	<title>{project.name}</title>
+</svelte:head>
