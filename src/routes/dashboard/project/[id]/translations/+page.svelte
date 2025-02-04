@@ -16,21 +16,30 @@
 		Toast
 	} from 'flowbite-svelte';
 	import { ExclamationCircleSolid } from 'flowbite-svelte-icons';
+	import { onMount } from 'svelte';
+	import { SvelteMap } from 'svelte/reactivity';
 
 	const { data } = $props();
 	const { translations: translationsSource, supabase, project, profile } = data;
 
 	let loading = $state(false);
 	const languages = ['en', 'fr'];
-	let changes: Partial<Tables<'translations'>>[] = [];
 	let unsaved_changes = $state(false); // Prevent leaving page without saving
 	let translation_modal = $state(false);
 	let new_translation: Partial<Tables<'translations'>> = $state({ project_id: project.id });
 	let is_supperadmin = profile.is_admin;
-	let translations = $state([...translationsSource]);
 	let is_project_admin =
 		project.owner_id == profile.id ||
 		project.users.some((u) => u.user_id == profile.id && u.is_admin);
+
+	let translationsMap = new SvelteMap<string, Tables<'translations'>>();
+
+	onMount(async () => {
+		translationsSource.forEach((t) => {
+			if (translationsMap.has(t.key) && t.project_id == null) return;
+			translationsMap.set(t.key, t);
+		});
+	});
 
 	beforeNavigate(({ cancel }) => {
 		if (unsaved_changes) {
@@ -47,44 +56,35 @@
 	async function save() {
 		loading = true;
 
-		// TODO: Change to batch update and remove dupplicates from changes;
-		for (const change of changes) {
-			const { id, ...rest } = change;
-			if (id) {
-				const { error } = await supabase
-					.from('translations')
-					.update(rest)
-					.eq('id', id)
-					.select();
-				if (error) {
-					alert('An error occured while saving changes');
-					console.error(error);
-					break;
-				}
-			} else {
-				const { data, error } = await supabase
-					.from('translations')
-					.insert(rest)
-					.select();
-				if (error) {
-					alert('An error occured while saving changes');
-					console.error(error);
-					break;
-				}
+		const translations = Array.from(translationsMap.values());
+		for (const translation of translations) {
+			const { id, ...rest } = translation;
+			let error;
+			if (translation.id == -1)
+				// We insert the translation
+				({ error } = await supabase.from('translations').insert(rest)); // We update the translation
+			else ({ error } = await supabase.from('translations').update(rest).eq('id', translation.id));
+
+			if (error || !data) {
+				alert('An error occured while saving the translations');
+				console.error(error);
+				loading = false;
+				return;
 			}
 		}
-		changes = [];
 
 		loading = false;
 		unsaved_changes = false;
 	}
 
-	async function handleInput(e: Event & { currentTarget: HTMLDivElement }, trans_index: number) {
-		const translation = translations[trans_index];
-		const language = e.currentTarget.dataset.language!;
-		translation[language as 'fr' | 'en'] = e.currentTarget.innerText;
+	async function handleInput(e: Event & { currentTarget: HTMLDivElement }, key: string) {
+		const translation = translationsMap.get(key);
+		if (!translation) return;
+		if (translation.project_id == null && !is_supperadmin) {
+			translation.id = -1;
+			translation.project_id = project.id;
+		}
 
-		changes = [...changes.filter((c) => c.id != translation.id), translation];
 		unsaved_changes = true;
 	}
 
@@ -107,10 +107,10 @@
 			alert('An error occured while creating the translation');
 			console.error(error);
 		} else {
-			// location.reload();
-			translations = [...translations, data];
-			new_translation = { project_id: project.id };
+			// Add the translation to the map
+			translationsMap.set(data.key, data);
 			translation_modal = false;
+			new_translation = { project_id: project.id };
 		}
 	}
 </script>
@@ -123,7 +123,7 @@
 		{/each}
 	</TableHead>
 	<TableBody>
-		{#each translations as translation, i}
+		{#each [...translationsMap] as [key, translation]}
 			{@const editable = is_supperadmin || is_project_admin}
 			<TableBodyRow>
 				<TableBodyCell>{translation.key}</TableBodyCell>
@@ -132,7 +132,7 @@
 						{#if editable}
 							<div
 								contenteditable="true"
-								oninput={(e) => handleInput(e, i)}
+								oninput={(e) => handleInput(e, key)}
 								data-language={language}
 								class={editable ? 'border border-gray-200 dark:border-gray-700' : ''}
 								bind:innerText={translation[language as 'fr' | 'en']}
