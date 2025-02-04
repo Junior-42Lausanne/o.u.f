@@ -107,7 +107,9 @@
 	<TableHead>
 		<TableHeadCell>{$i18n.t('dashboard.project.[id].translations.key_column')}</TableHeadCell>
 		{#each languages as language}
-			<TableHeadCell>{$i18n.t(`dashboard.project.[id].translations.${language}_column`)}</TableHeadCell>
+			<TableHeadCell
+				>{$i18n.t(`dashboard.project.[id].translations.${language}_column`)}</TableHeadCell
+			>
 		{/each}
 	</TableHead>
 	<TableBody>
@@ -135,7 +137,9 @@
 	</TableBody>
 </Table>
 
-<Button onclick={() => (translation_modal = true)}>{$i18n.t('dashboard.project.[id].translations.create_new_button')}</Button>
+<Button onclick={() => (translation_modal = true)}
+	>{$i18n.t('dashboard.project.[id].translations.create_new_button')}</Button
+>
 
 <Toast
 	bind:toastStatus={unsaved_changes}
@@ -144,7 +148,9 @@
 	class="absolute bottom-0 right-0 m-4"
 >
 	<ExclamationCircleSolid slot="icon" class="h-6 w-6" />
-	<span class="font-semibold text-gray-900 dark:text-white">{$i18n.t('dashboard.project.[id].translations.unsaved_changed_toast_title')}</span>
+	<span class="font-semibold text-gray-900 dark:text-white"
+		>{$i18n.t('dashboard.project.[id].translations.unsaved_changed_toast_title')}</span
+	>
 	<div class="mt-3">
 		<div class="mb-2 text-sm font-normal">
 			{$i18n.t('dashboard.project.[id].translations.unsaved_changed_toast_description')}
@@ -161,7 +167,10 @@
 	</div>
 </Toast>
 
-<Modal bind:open={translation_modal} title={$i18n.t('dashboard.project.[id].translations.create_new_modal_title')}>
+<Modal
+	bind:open={translation_modal}
+	title={$i18n.t('dashboard.project.[id].translations.create_new_modal_title')}
+>
 	<form onsubmit={handleCreateTranslation}>
 		<div class="mb-4">
 			<Label for="key">{$i18n.t('dashboard.project.[id].translations.key_column')}</Label>
@@ -169,15 +178,18 @@
 		</div>
 		{#each languages as language}
 			<div class="mb-4">
-				<Label for={language}>{$i18n.t(`dashboard.project.[id].translations.${language}_column`)}</Label>
+				<Label for={language}
+					>{$i18n.t(`dashboard.project.[id].translations.${language}_column`)}</Label
+				>
 				<Input type="text" id={language} bind:value={new_translation[language as 'fr' | 'en']} />
 			</div>
 		{/each}
-		<Button type="submit">{$i18n.t(`dashboard.project.[id].translations.create_new_modal_button`)}</Button>
+		<Button type="submit"
+			>{$i18n.t(`dashboard.project.[id].translations.create_new_modal_button`)}</Button
+		>
 	</form>
 </Modal>
 
 <svelte:head>
 	<title>{$i18n.t(`dashboard.project.[id].translations.tab_title`)}</title>
 </svelte:head>
-

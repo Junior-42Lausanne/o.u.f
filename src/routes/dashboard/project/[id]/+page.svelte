@@ -7,11 +7,17 @@
 
 	const link_base = `/dashboard/project/${project.id}`;
 	const links = [
-		{ name: $i18n.t('dashboard.project.[id].project_settings_link'), href: `${link_base}/settings` },
-		{ name: $i18n.t('dashboard.project.[id].project_translations_link'), href: `${link_base}/translations` },
-		{ name: $i18n.t('dashboard.project.[id].project_library_link'), href: `${link_base}/library` },
+		{
+			name: $i18n.t('dashboard.project.[id].project_settings_link'),
+			href: `${link_base}/settings`
+		},
+		{
+			name: $i18n.t('dashboard.project.[id].project_translations_link'),
+			href: `${link_base}/translations`
+		},
+		{ name: $i18n.t('dashboard.project.[id].project_library_link'), href: `${link_base}/library` }
 		// { name: $i18n.t('dashboard.project.[id].project_settings_link'), href: `${link_base}/settings` },
-	]
+	];
 </script>
 
 <div class="grid grid-cols-3">

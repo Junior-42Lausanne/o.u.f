@@ -14,9 +14,10 @@
 		event.preventDefault();
 
 		try {
-			const { data: forgotPasswordData, error: forgotPasswordError } = await supabase.auth.resetPasswordForEmail(email, {
-				redirectTo: window.location.origin + '/auth/reset-password',
-			});
+			const { data: forgotPasswordData, error: forgotPasswordError } =
+				await supabase.auth.resetPasswordForEmail(email, {
+					redirectTo: window.location.origin + '/auth/reset-password'
+				});
 
 			if (forgotPasswordError) {
 				errorMessage = forgotPasswordError.message;
@@ -36,17 +37,27 @@
 	<h1 class="text-4xl font-bold">{$i18n.t('auth.forgot-password.title')}</h1>
 	<form action="#" onsubmit={handleFormSubmit} class="mt-6 w-full max-w-sm">
 		{#if errorMessage}
-			<p class="text-red-500 mb-4">{errorMessage}</p>
+			<p class="mb-4 text-red-500">{errorMessage}</p>
 		{/if}
 		{#if successMessage}
-			<p class="text-green-500 mb-4">{successMessage}</p>
+			<p class="mb-4 text-green-500">{successMessage}</p>
 		{/if}
 		<div class="mb-6">
 			<Label for="email" class="mb-2">{$i18n.t('auth.forgot-password.email_label')}</Label>
-			<Input type="email" id="email" placeholder={$i18n.t('auth.forgot-password.email_placeholder')} required bind:value={email} />
+			<Input
+				type="email"
+				id="email"
+				placeholder={$i18n.t('auth.forgot-password.email_placeholder')}
+				required
+				bind:value={email}
+			/>
 		</div>
-		<Button type="submit" class="w-full">{$i18n.t('auth.forgot-password.recover_password_button')}</Button>
-		<A href="/auth" class="hover:underline text-center block">{$i18n.t('auth.forgot-password.login_page_link')}</A>
+		<Button type="submit" class="w-full"
+			>{$i18n.t('auth.forgot-password.recover_password_button')}</Button
+		>
+		<A href="/auth" class="block text-center hover:underline"
+			>{$i18n.t('auth.forgot-password.login_page_link')}</A
+		>
 	</form>
 </div>
 

@@ -2,7 +2,7 @@
 	import { invalidate } from '$app/navigation';
 	import { Input, Label, Helper, Button, Checkbox, A } from 'flowbite-svelte';
 	import { z } from 'zod';
-  import i18n from '$lib/i18n';
+	import i18n from '$lib/i18n';
 
 	const { data } = $props();
 	const { supabase } = data;
@@ -33,11 +33,9 @@
 					.refine((data) => data === password, {
 						message: $i18n.t('auth.register.error_password_match')
 					}),
-				cgu: z
-					.boolean()
-					.refine((data) => data === true, {
-						message: $i18n.t('auth.register.error_cgu')
-					}),
+				cgu: z.boolean().refine((data) => data === true, {
+					message: $i18n.t('auth.register.error_cgu')
+				}),
 				first_name: z.string().min(2, $i18n.t('auth.register.error_first_name')),
 				last_name: z.string().min(2, $i18n.t('auth.register.error_last_name')),
 				activity: z.string().min(2, $i18n.t('auth.register.error_activity')),
@@ -93,23 +91,54 @@
 			<p class="mb-4 text-green-500">{successMessage}</p>
 		{/if}
 		<div class="mb-6">
-			<Label for="first_name" class="mb-2">{$i18n.t('auth.register.first_name_label')} <span class="text-red-500">*</span></Label>
-			<Input type="text" id="first_name" placeholder={$i18n.t('auth.register.first_name_placeholder')} required bind:value={first_name} />
+			<Label for="first_name" class="mb-2"
+				>{$i18n.t('auth.register.first_name_label')} <span class="text-red-500">*</span></Label
+			>
+			<Input
+				type="text"
+				id="first_name"
+				placeholder={$i18n.t('auth.register.first_name_placeholder')}
+				required
+				bind:value={first_name}
+			/>
 		</div>
 		<div class="mb-6">
-			<Label for="last_name" class="mb-2">{$i18n.t('auth.register.last_name_label')} <span class="text-red-500">*</span></Label>
-			<Input type="text" id="last_name" placeholder={$i18n.t('auth.register.last_name_placeholder')} required bind:value={last_name} />
+			<Label for="last_name" class="mb-2"
+				>{$i18n.t('auth.register.last_name_label')} <span class="text-red-500">*</span></Label
+			>
+			<Input
+				type="text"
+				id="last_name"
+				placeholder={$i18n.t('auth.register.last_name_placeholder')}
+				required
+				bind:value={last_name}
+			/>
 		</div>
 		<div class="mb-6">
-			<Label for="activity" class="mb-2">{$i18n.t('auth.register.activity_label')} <span class="text-red-500">*</span></Label>
-			<Input type="text" id="activity" placeholder={$i18n.t('auth.register.activity_placeholder')} required bind:value={activity} />
+			<Label for="activity" class="mb-2"
+				>{$i18n.t('auth.register.activity_label')} <span class="text-red-500">*</span></Label
+			>
+			<Input
+				type="text"
+				id="activity"
+				placeholder={$i18n.t('auth.register.activity_placeholder')}
+				required
+				bind:value={activity}
+			/>
 		</div>
 		<div class="mb-6">
 			<Label for="work_link" class="mb-2">{$i18n.t('auth.register.work_link_label')}</Label>
-			<Input type="text" id="work_link" placeholder={$i18n.t('auth.register.work_link_placeholder')} bind:value={work_link} />
+			<Input
+				type="text"
+				id="work_link"
+				placeholder={$i18n.t('auth.register.work_link_placeholder')}
+				bind:value={work_link}
+			/>
 		</div>
 		<div class="mb-6">
-			<Label for="email" class="mb-2">{$i18n.t('auth.register.email_label')} <span class="text-red-500">*</span></Label>
+			<Label for="email" class="mb-2"
+				>{$i18n.t('auth.register.email_label')} <span class="text-red-500">*</span></Label
+			>
 			<Input
 				type="email"
 				id="email"
@@ -119,11 +148,22 @@
 			/>
 		</div>
 		<div class="mb-6">
-			<Label for="password" class="mb-2">{$i18n.t('auth.register.password_label')} <span class="text-red-500">*</span></Label>
-			<Input class="placeholder:text-gray-400" type="password" id="password" placeholder="•••••••••" required bind:value={password} />
+			<Label for="password" class="mb-2"
+				>{$i18n.t('auth.register.password_label')} <span class="text-red-500">*</span></Label
+			>
+			<Input
+				class="placeholder:text-gray-400"
+				type="password"
+				id="password"
+				placeholder="•••••••••"
+				required
+				bind:value={password}
+			/>
 		</div>
 		<div class="mb-6">
-			<Label for="password" class="mb-2">{$i18n.t('auth.register.confirm_password_label')} <span class="text-red-500">*</span></Label
+			<Label for="password" class="mb-2"
+				>{$i18n.t('auth.register.confirm_password_label')}
+				<span class="text-red-500">*</span></Label
 			>
 			<Input
 				class="placeholder:text-gray-400"
@@ -135,8 +175,8 @@
 			/>
 		</div>
 		<Checkbox class="mb-6 space-x-1 rtl:space-x-reverse" required bind:checked={join_network}>
-			{$i18n.t('auth.register.join_7_billion_urbanists_network')} <A href="#" class="hover:underline">7 Billion Urbanists Network</A
-			>
+			{$i18n.t('auth.register.join_7_billion_urbanists_network')}
+			<A href="#" class="hover:underline">7 Billion Urbanists Network</A>
 		</Checkbox>
 		<Checkbox class="mb-2 space-x-1 rtl:space-x-reverse" required bind:checked={cgu}>
 			{$i18n.t('auth.register.agree_with_cgu')}<A href="/cgu" class="hover:underline"
