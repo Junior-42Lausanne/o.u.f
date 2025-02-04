@@ -18,16 +18,19 @@
 	import { ExclamationCircleSolid } from 'flowbite-svelte-icons';
 
 	const { data } = $props();
-	const { translations, supabase, project, profile } = data;
+	const { translations: translationsSource, supabase, project, profile } = data;
 
 	let loading = $state(false);
 	const languages = ['en', 'fr'];
-	let changes: Tables<'translations'>[] = [];
+	let changes: Partial<Tables<'translations'>>[] = [];
 	let unsaved_changes = $state(false); // Prevent leaving page without saving
 	let translation_modal = $state(false);
-	let new_translation:Partial<Tables<'translations'>> = $state({project_id: project.id});
+	let new_translation: Partial<Tables<'translations'>> = $state({ project_id: project.id });
 	let is_supperadmin = profile.is_admin;
-	let is_project_admin = project.owner_id == profile.id || project.users.some(u => u.user_id == profile.id && u.is_admin);
+	let translations = $state([...translationsSource]);
+	let is_project_admin =
+		project.owner_id == profile.id ||
+		project.users.some((u) => u.user_id == profile.id && u.is_admin);
 
 	beforeNavigate(({ cancel }) => {
 		if (unsaved_changes) {
@@ -47,15 +50,27 @@
 		// TODO: Change to batch update and remove dupplicates from changes;
 		for (const change of changes) {
 			const { id, ...rest } = change;
-			const { error } = await supabase
-				.from('translations')
-				.update(rest)
-				.eq('id', change.id)
-				.select();
-			if (error) {
-				alert('An error occured while saving changes');
-				console.error(error);
-				break;
+			if (id) {
+				const { error } = await supabase
+					.from('translations')
+					.update(rest)
+					.eq('id', id)
+					.select();
+				if (error) {
+					alert('An error occured while saving changes');
+					console.error(error);
+					break;
+				}
+			} else {
+				const { data, error } = await supabase
+					.from('translations')
+					.insert(rest)
+					.select();
+				if (error) {
+					alert('An error occured while saving changes');
+					console.error(error);
+					break;
+				}
 			}
 		}
 		changes = [];
@@ -64,10 +79,7 @@
 		unsaved_changes = false;
 	}
 
-	async function handleInput(
-		e: Event & { currentTarget: HTMLTableCellElement },
-		trans_index: number
-	) {
+	async function handleInput(e: Event & { currentTarget: HTMLDivElement }, trans_index: number) {
 		const translation = translations[trans_index];
 		const language = e.currentTarget.dataset.language!;
 		translation[language as 'fr' | 'en'] = e.currentTarget.innerText;
@@ -82,16 +94,23 @@
 			return;
 		}
 
-		const {id, key, ...rest} = new_translation;
-		const { data, error } = await supabase.from('translations').insert({
-			key,
-			...rest
-		}).select().single();
+		const { id, key, ...rest } = new_translation;
+		const { data, error } = await supabase
+			.from('translations')
+			.insert({
+				key,
+				...rest
+			})
+			.select()
+			.single();
 		if (error || !data) {
 			alert('An error occured while creating the translation');
 			console.error(error);
 		} else {
-			location.reload();
+			// location.reload();
+			translations = [...translations, data];
+			new_translation = { project_id: project.id };
+			translation_modal = false;
 		}
 	}
 </script>
@@ -109,14 +128,18 @@
 			<TableBodyRow>
 				<TableBodyCell>{translation.key}</TableBodyCell>
 				{#each languages as language}
-					<!-- @ts-ignore -->
-					<TableBodyCell
-						contenteditable={editable}
-						oninput={(e) => handleInput(e, i)}
-						data-language={language}
-						class={editable ? "border border-gray-200 dark:border-gray-700": ""}
-					>
-						{translation[language as 'fr' | 'en']}
+					<TableBodyCell>
+						{#if editable}
+							<div
+								contenteditable="true"
+								oninput={(e) => handleInput(e, i)}
+								data-language={language}
+								class={editable ? 'border border-gray-200 dark:border-gray-700' : ''}
+								bind:innerText={translation[language as 'fr' | 'en']}
+							></div>
+						{:else}
+							{translation[language as 'fr' | 'en']}
+						{/if}
 					</TableBodyCell>
 				{/each}
 			</TableBodyRow>
@@ -124,7 +147,7 @@
 	</TableBody>
 </Table>
 
-<Button onclick={() => translation_modal = true}>Create a new entry</Button>
+<Button onclick={() => (translation_modal = true)}>Create a new entry</Button>
 
 <Toast
 	bind:toastStatus={unsaved_changes}
