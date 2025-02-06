@@ -1,4 +1,50 @@
 {
+  "mail": {
+    "invite": {
+      "introduction_title": "",
+      "introduction_description": "",
+      "join_button": ""
+    }
+  },
+  "dashboard": {
+    "project": {
+      "[id]": {
+        "translations": {
+          "fr_column": "",
+          "en_column": "",
+          "unsaved_changes_confirm": "",
+          "error_saving": "",
+          "error_key_required": "",
+          "error_creating": "",
+          "key_column": "",
+          "create_new_button": "",
+          "unsaved_changed_toast_title": "",
+          "unsaved_changed_toast_description": "",
+          "unsaved_changed_toast_button": "",
+          "create_new_modal_title": "",
+          "create_new_modal_button": "",
+          "tab_title": ""
+        },
+        "project_settings_link": "",
+        "project_translations_link": "",
+        "project_library_link": ""
+      }
+    },
+    "layout": {
+      "sign_out_error": "",
+      "navbar_home_link": "",
+      "navbar_settings_link": "",
+      "navbar_sign_out_link": ""
+    },
+    "project_name": "",
+    "url_prefix": "",
+    "users": "",
+    "actions": "",
+    "owner": "",
+    "admin": "",
+    "manage_project_button": "",
+    "create_project_button": ""
+  },
   "auth": {
     "success_sign_in": "",
     "error_sign_in": "",
@@ -50,45 +96,6 @@
       "register_button": "",
       "already_have_account_link": "",
       "tab_title": ""
-    }
-  },
-  "dashboard": {
-    "layout": {
-      "sign_out_error": "",
-      "navbar_home_link": "",
-      "navbar_settings_link": "",
-      "navbar_sign_out_link": ""
-    },
-    "project_name": "",
-    "url_prefix": "",
-    "users": "",
-    "actions": "",
-    "owner": "",
-    "admin": "",
-    "manage_project_button": "",
-    "create_project_button": "",
-    "project": {
-      "[id]": {
-        "project_settings_link": "",
-        "project_translations_link": "",
-        "project_library_link": "",
-        "translations": {
-          "unsaved_changes_confirm": "",
-          "error_saving": "",
-          "error_key_required": "",
-          "error_creating": "",
-          "key_column": "",
-          "create_new_button": "",
-          "unsaved_changed_toast_title": "",
-          "unsaved_changed_toast_description": "",
-          "unsaved_changed_toast_button": "",
-          "create_new_modal_title": "",
-          "create_new_modal_button": "",
-          "tab_title": "",
-          "fr_column": "",
-          "en_column": ""
-        }
-      }
     }
   }
 }

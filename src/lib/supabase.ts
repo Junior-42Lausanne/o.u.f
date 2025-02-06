@@ -100,25 +100,31 @@ export type Database = {
       }
       project_invites: {
         Row: {
+          admin: boolean
           created_at: string
           email: string
           id: number
           invited_by: string
           project_id: number
+          token: string
         }
         Insert: {
+          admin?: boolean
           created_at?: string
           email: string
           id?: never
           invited_by: string
           project_id: number
+          token: string
         }
         Update: {
+          admin?: boolean
           created_at?: string
           email?: string
           id?: never
           invited_by?: string
           project_id?: number
+          token?: string
         }
         Relationships: [
           {

@@ -1,4 +1,50 @@
 {
+  "mail": {
+    "invite": {
+      "introduction_title": "",
+      "introduction_description": "",
+      "join_button": ""
+    }
+  },
+  "dashboard": {
+    "project": {
+      "[id]": {
+        "translations": {
+          "fr_column": "French",
+          "en_column": "English",
+          "unsaved_changes_confirm": "You have unsaved changes ! If you leave this page without saving all your changes will be lost.",
+          "error_saving": "There was an error saving your changes, please try again.",
+          "error_key_required": "Key is required.",
+          "error_creating": "There was an error creating the translation, please try again.",
+          "key_column": "Key",
+          "create_new_button": "Create new",
+          "unsaved_changed_toast_title": "Unsaved changes",
+          "unsaved_changed_toast_description": "You have unsaved changes ! If you leave this page without saving all your changes will be lost.",
+          "unsaved_changed_toast_button": "Save",
+          "create_new_modal_title": "Create new translation",
+          "create_new_modal_button": "Create",
+          "tab_title": "Translations"
+        },
+        "project_settings_link": "Settings",
+        "project_translations_link": "Translations",
+        "project_library_link": "Library"
+      }
+    },
+    "layout": {
+      "sign_out_error": "There was an error signing you out, please try again.",
+      "navbar_home_link": "Home",
+      "navbar_settings_link": "Settings",
+      "navbar_sign_out_link": "Sign out"
+    },
+    "project_name": "Project name",
+    "url_prefix": "URL prefix",
+    "users": "Users",
+    "actions": "",
+    "owner": "owner",
+    "admin": "admin",
+    "manage_project_button": "Manage",
+    "create_project_button": "Create a new project"
+  },
   "auth": {
     "success_sign_in": "You have been successfully signed in. Redirecting...",
     "error_sign_in": "There was an error signing you in, please try again.",
@@ -50,45 +96,6 @@
       "register_button": "Register",
       "already_have_account_link": "I already have an account",
       "tab_title": "Register"
-    }
-  },
-  "dashboard": {
-    "layout": {
-      "sign_out_error": "There was an error signing you out, please try again.",
-      "navbar_home_link": "Home",
-      "navbar_settings_link": "Settings",
-      "navbar_sign_out_link": "Sign out"
-    },
-    "project_name": "Project name",
-    "url_prefix": "URL prefix",
-    "users": "Users",
-    "actions": "",
-    "owner": "owner",
-    "admin": "admin",
-    "manage_project_button": "Manage",
-    "create_project_button": "Create a new project",
-    "project": {
-      "[id]": {
-        "project_settings_link": "Settings",
-        "project_translations_link": "Translations",
-        "project_library_link": "Library",
-        "translations": {
-          "unsaved_changes_confirm": "You have unsaved changes ! If you leave this page without saving all your changes will be lost.",
-          "error_saving": "There was an error saving your changes, please try again.",
-          "error_key_required": "Key is required.",
-          "error_creating": "There was an error creating the translation, please try again.",
-          "key_column": "Key",
-          "create_new_button": "Create new",
-          "unsaved_changed_toast_title": "Unsaved changes",
-          "unsaved_changed_toast_description": "You have unsaved changes ! If you leave this page without saving all your changes will be lost.",
-          "unsaved_changed_toast_button": "Save",
-          "create_new_modal_title": "Create new translation",
-          "create_new_modal_button": "Create",
-          "tab_title": "Translations",
-          "fr_column": "French",
-          "en_column": "English"
-        }
-      }
     }
   }
 }

@@ -26,6 +26,8 @@ CREATE TABLE IF NOT EXISTS public.project_invites (
 	invited_by UUID NOT NULL,
 	email TEXT NOT NULL,
 	project_id BIGINT NOT NULL,
+	token TEXT NOT NULL UNIQUE,
+	admin BOOLEAN NOT NULL DEFAULT FALSE,
 	FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (invited_by) REFERENCES public.profiles(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -166,7 +168,7 @@ CREATE POLICY "Delete projects only for owners"
 ON public.projects
 FOR DELETE
 USING (
-		public.is_project_owner(id) OR public.is_superadmin()
+		public.is_project_owner(id) OR public.is_superadmin()OR email = (select auth.email())
 );
 
 CREATE POLICY "Delete project_users only for project admins"
