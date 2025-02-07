@@ -4,6 +4,8 @@
 		Button,
 		ButtonGroup,
 		Checkbox,
+		Fileupload,
+		Helper,
 		Input,
 		Label,
 		Modal,
@@ -18,7 +20,7 @@
 	} from 'flowbite-svelte';
 
 	const { data } = $props();
-	const { project, profile, supabase } = data;
+	const { project, profile, supabase, home_image_exists, logo_exists } = data;
 
 	let is_supperadmin = profile.is_admin;
 	let is_project_admin =
@@ -34,6 +36,9 @@
 
 	let invite_email = $state('');
 	let invite_is_admin = $state('');
+
+	let home_image_file = $state<FileList>();
+	let logo_file = $state<FileList>();
 
 	async function handleProjectSave() {
 		project_saving = true;
@@ -105,6 +110,36 @@
 			console.error(await res.json());
 		}
 	}
+
+	async function handleImages(e: Event) {
+		e.preventDefault();
+		if (home_image_file) {
+			const file = home_image_file[0];
+			const { data, error } = await supabase.storage
+				.from('projects')
+				.upload(`${project.id}/home.png`, file, {
+					upsert: true
+				});
+			if (error) {
+				console.error('error', error);
+				alert('Error uploading image');
+			}
+		}
+		if (logo_file) {
+			const file = logo_file[0];
+			const { data, error } = await supabase.storage
+				.from('projects')
+				.upload(`${project.id}/logo.png`, file, {
+					upsert: true
+				});
+			if (error) {
+				console.error('error', error);
+				alert('Error uploading image');
+			}
+		}
+
+		location.reload();
+	}
 </script>
 
 <h2>Project settings</h2>
@@ -129,6 +164,13 @@
 			id="project_url_prefix"
 			placeholder="super_prefix"
 			bind:value={project.url_prefix}
+			oninput={() => (project_changed = true)}
+		/>
+	</div>
+	<div class="mb-4">
+		<Label for="restricted_premix_mode">Restricted premix mode</Label>
+		<Checkbox
+			bind:checked={project.restricted_premix_mode}
 			oninput={() => (project_changed = true)}
 		/>
 	</div>
@@ -191,6 +233,35 @@
 			</TableBodyRow>
 		</TableBody>
 	</Table>
+</form>
+
+<h2>Home page</h2>
+<form onsubmit={handleImages}>
+	{#if home_image_exists}
+		<img
+			src={supabase.storage.from('projects').getPublicUrl(`${project.id}/home.png`).data.publicUrl}
+			alt="Home background"
+			class="h-20"
+		/>
+	{/if}
+	<div>
+		<Label for="home_image">Upload a home image</Label>
+		<Fileupload id="home_image" bind:files={home_image_file} accept="image/png" />
+		<Helper>PNG (Max 2Mb)</Helper>
+	</div>
+	{#if logo_exists}
+		<img
+			src={supabase.storage.from('projects').getPublicUrl(`${project.id}/logo.png`).data.publicUrl}
+			alt="Logo"
+			class="h-20"
+		/>
+	{/if}
+	<div>
+		<Label for="logo">Upload a logo</Label>
+		<Fileupload id="logo" bind:files={logo_file} accept="image/png" />
+		<Helper>PNG (Max 2Mb)</Helper>
+	</div>
+	<Button type="submit">Save</Button>
 </form>
 
 <Modal bind:open={edit_user_modal} title="Edit user role">
