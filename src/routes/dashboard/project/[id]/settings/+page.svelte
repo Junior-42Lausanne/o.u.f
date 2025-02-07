@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Tables } from '$lib/supabase.js';
+	import { languages } from '$lib/translation';
 	import {
 		Button,
 		ButtonGroup,
@@ -9,6 +10,7 @@
 		Input,
 		Label,
 		Modal,
+		MultiSelect,
 		Select,
 		Spinner,
 		Table,
@@ -18,6 +20,7 @@
 		TableHead,
 		TableHeadCell
 	} from 'flowbite-svelte';
+	import i18n from '$lib/i18n';
 
 	const { data } = $props();
 	const { project, profile, supabase, home_image_exists, logo_exists } = data;
@@ -30,6 +33,7 @@
 
 	let project_changed = $state(false);
 	let project_saving = $state(false);
+	let project_langs = $state(project.languages || []);
 
 	let edit_user_modal = $state(false);
 	let edit_user: (Tables<'project_users'> & { profile: Tables<'profiles'> }) | undefined = $state();
@@ -42,10 +46,10 @@
 
 	async function handleProjectSave() {
 		project_saving = true;
-		const { id, name, url_prefix, ...rest } = project;
+		const { id, name, url_prefix, restricted_premix_mode, ...rest } = project;
 		const { data, error } = await supabase
 			.from('projects')
-			.update({ name, url_prefix })
+			.update({ name, url_prefix, restricted_premix_mode, languages: project_langs })
 			.eq('id', id);
 		if (error) {
 			console.error('error', error);
@@ -172,6 +176,15 @@
 		<Checkbox
 			bind:checked={project.restricted_premix_mode}
 			oninput={() => (project_changed = true)}
+		/>
+	</div>
+	<div class="mb-4">
+		<Label for="languages">Project languages</Label>
+		<MultiSelect
+			id="languages"
+			bind:value={project_langs}
+			on:click={() => (project_changed = true)}
+			items={languages.map((lang) => ({ value: lang, name: $i18n.t(`global.lang.${lang}`) }))}
 		/>
 	</div>
 	<Button disabled={!can_edit || !project_changed} type="submit">

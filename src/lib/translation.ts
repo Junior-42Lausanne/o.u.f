@@ -1,5 +1,5 @@
-import { SvelteMap } from "svelte/reactivity";
-import type { Tables } from "./supabase";
+import { SvelteMap } from 'svelte/reactivity';
+import type { Tables } from './supabase';
 
 export function generateTranslationsMap(translations: Tables<'translations'>[]) {
 	const map = new SvelteMap<string, Tables<'translations'>>();
@@ -14,5 +14,5 @@ export function generateTranslationsMap(translations: Tables<'translations'>[]) 
 export const languages = ['en', 'fr'] as const;
 
 // In order for i18next cli to find those keys they need to be cited somewhere since in the template it's a dynamic string.
-// t('dashboard.project.[id].translations.fr_column')
-// t('dashboard.project.[id].translations.en_column')
+// t('global.lang.fr')
+// t('global.lang.en')

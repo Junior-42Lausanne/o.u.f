@@ -106,10 +106,8 @@
 <Table>
 	<TableHead>
 		<TableHeadCell>{$i18n.t('dashboard.project.[id].translations.key_column')}</TableHeadCell>
-		{#each languages as language}
-			<TableHeadCell
-				>{$i18n.t(`dashboard.project.[id].translations.${language}_column`)}</TableHeadCell
-			>
+		{#each project.languages as language}
+			<TableHeadCell>{$i18n.t(`global.lang.${language}`)}</TableHeadCell>
 		{/each}
 	</TableHead>
 	<TableBody>
@@ -117,7 +115,8 @@
 			{@const editable = is_supperadmin || is_project_admin}
 			<TableBodyRow>
 				<TableBodyCell>{translation.key}</TableBodyCell>
-				{#each languages as language}
+				{#each project.languages as language}
+					{@const lang = language as (typeof languages)[number]}
 					<TableBodyCell>
 						{#if editable}
 							<div
@@ -125,7 +124,7 @@
 								oninput={(e) => handleInput(e, key)}
 								data-language={language}
 								class={editable ? 'border border-gray-200 dark:border-gray-700' : ''}
-								bind:innerText={translation[language]}
+								bind:innerText={translation[lang]}
 							></div>
 						{:else}
 							{translation[language as 'fr' | 'en']}
@@ -176,12 +175,14 @@
 			<Label for="key">{$i18n.t('dashboard.project.[id].translations.key_column')}</Label>
 			<Input type="text" id="key" bind:value={new_translation.key} />
 		</div>
-		{#each languages as language}
+		{#each project.languages as language}
 			<div class="mb-4">
-				<Label for={language}
-					>{$i18n.t(`dashboard.project.[id].translations.${language}_column`)}</Label
-				>
-				<Input type="text" id={language} bind:value={new_translation[language as 'fr' | 'en']} />
+				<Label for={language}>{$i18n.t(`global.lang.${language}`)}</Label>
+				<Input
+					type="text"
+					id={language}
+					bind:value={new_translation[language as (typeof languages)[number]]}
+				/>
 			</div>
 		{/each}
 		<Button type="submit"
