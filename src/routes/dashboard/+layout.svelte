@@ -27,10 +27,6 @@
 
 		window.location.href = '/';
 	}
-
-	const menus: { name: string; href: string }[] = [
-		{ name: $i18n.t('dashboard.layout.navbar_home_link'), href: '/dashboard' }
-	];
 </script>
 
 <div class="flex h-screen flex-col">
@@ -40,11 +36,11 @@
 			<!-- <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Flowbite</span> -->
 		</NavBrand>
 		<NavUl class="hidden md:flex">
-			{#each menus as menu}
-				<NavLi>
-					<a href={menu.href} class="hover:text-gray-900 dark:hover:text-white">{menu.name}</a>
-				</NavLi>
-			{/each}
+			<NavLi>
+				<a href={'/dashboard'} class="hover:text-gray-900 dark:hover:text-white">
+					{$i18n.t('dashboard.layout.navbar_home_link')}
+				</a>
+			</NavLi>
 		</NavUl>
 		<div class="flex items-center md:order-3">
 			<Avatar
