@@ -2,3 +2,9 @@
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
+
+# Svelte assets
+static/
+
+# is auto-generated
+src/lib/supabase.ts
