@@ -35,4 +35,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
       - run: pnpm install
+      - run: cp .env.example .env # allow svelte sync to type env variables
       - run: pnpm run check
