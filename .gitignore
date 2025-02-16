@@ -24,3 +24,6 @@ vite.config.ts.timestamp-*
 
 # Editor
 .zed/
+
+# i18n
+static/locales/dev.json
