@@ -19,3 +19,21 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm run format:check
+
+  svelte-check:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [20]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: cp .env.example .env # allow svelte sync to type env variables
+      - run: pnpm run check
