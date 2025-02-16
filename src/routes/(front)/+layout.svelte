@@ -68,7 +68,7 @@
 </main>
 
 <footer
-	class="bg-footer fixed bottom-0 z-50 flex h-[35px] w-screen items-center justify-between text-sm text-white"
+	class="fixed bottom-0 z-50 flex h-[35px] w-screen items-center justify-between bg-footer text-sm text-white"
 >
 	<div class="px-4">Unlimited Cities distributed by Open Urbanism Foundation</div>
 	<div class="ml-auto px-4">New software features developed for the Interlace project</div>
