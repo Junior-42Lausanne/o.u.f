@@ -3,7 +3,7 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { Progressbar, Toast } from 'flowbite-svelte';
-	import { addToast, removeToast, toasts, toastToColor, type ToastObj } from '$lib/toaster.svelte';
+	import { addToast, removeToast, toasts, typeToColor, type ToastObj } from '$lib/toaster.svelte';
 	import {
 		CheckCircleSolid,
 		CloseCircleSolid,
@@ -32,23 +32,12 @@
 
 {@render children()}
 
-<button
-	onclick={() =>
-		addToast({
-			message: 'lorem',
-			type: 'success',
-			timeout: 10000,
-			auto_dismiss: false,
-			dismissable: true
-		})}>Toast</button
->
-
 <div class="pointer-events-none absolute left-0 top-0 h-screen w-screen">
 	{#each toast_list as toast}
 		<Toast
 			class="pointer-events-auto"
 			on:close={() => removeToast(toast)}
-			color={toastToColor(toast.type)}
+			color={typeToColor(toast.type)}
 			dismissable={toast.dismissable}
 			position="bottom-right"
 			transition={slide}
@@ -69,7 +58,7 @@
 					tweenDuration={1000}
 					easing={linear}
 					class="mt-2"
-					color={toastToColor(toast.type)}
+					color={typeToColor(toast.type)}
 					progress={100 - (toast.timeout / toast.initial_timeout) * 100}
 				/>
 			{/if}
