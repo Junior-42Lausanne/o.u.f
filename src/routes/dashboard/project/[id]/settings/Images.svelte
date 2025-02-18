@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { addToast } from '$lib/toaster.svelte';
 	import { Button, Fileupload, Helper, Label } from 'flowbite-svelte';
 
 	const { project, supabase, home_image_exists, logo_exists } = $props();
@@ -17,7 +18,7 @@
 				});
 			if (error) {
 				console.error('error', error);
-				alert('Error uploading image');
+				addToast({ message: 'Error uploading image', type: 'error' });
 			}
 		}
 		if (logo_file) {
@@ -29,7 +30,7 @@
 				});
 			if (error) {
 				console.error('error', error);
-				alert('Error uploading image');
+				addToast({ message: 'Error uploading image', type: 'error' });
 			}
 		}
 

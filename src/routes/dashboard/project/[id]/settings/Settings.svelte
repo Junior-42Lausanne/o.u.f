@@ -1,5 +1,6 @@
 <script lang="ts">
 	import i18n from '$lib/i18n';
+	import { addToast } from '$lib/toaster.svelte';
 	import { languages } from '$lib/translation';
 	import { Button, Checkbox, Input, Label, MultiSelect, Spinner } from 'flowbite-svelte';
 
@@ -18,7 +19,7 @@
 			.eq('id', id);
 		if (error) {
 			console.error('error', error);
-			alert('Error saving project');
+			addToast({ message: 'Error saving project', type: 'error' });
 		} else {
 			project_changed = false;
 		}

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Tables } from '$lib/supabase';
+	import { addToast } from '$lib/toaster.svelte';
 	import {
 		Button,
 		ButtonGroup,
@@ -38,7 +39,7 @@
 
 		if (error) {
 			console.error('error', error);
-			alert('Error saving user');
+			addToast({ message: 'Error saving user', type: 'error' });
 		} else {
 			edit_user_modal = false;
 			location.reload();
@@ -50,7 +51,7 @@
 		const { error } = await supabase.from('project_users').delete().eq('id', user.id);
 		if (error) {
 			console.error('error', error);
-			alert('Error removing user');
+			addToast({ message: 'Error removing user', type: 'error' });
 		} else {
 			location.reload();
 		}
@@ -72,9 +73,9 @@
 		});
 
 		if (res.ok) {
-			alert('User invited');
+			addToast({ message: 'User invited', type: 'success' });
 		} else {
-			alert('Error inviting user');
+			addToast({ message: 'Error inviting user', type: 'error' });
 			console.error(await res.json());
 		}
 	}
