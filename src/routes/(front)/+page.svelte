@@ -44,5 +44,62 @@
 		</div>
 	</div>
 </div>
-<div id="description"></div>
-<div></div>
+<div id="description" class="bg-gray-200 pb-[100px] pt-[60px] text-[16px] text-gray-600">
+	<div class=" mx-auto w-full max-w-[780px] p-[10px]">
+		Las Soluciones Basadas en la Naturaleza (SbN) se refieren a acciones para proteger, gestionar y
+		restaurar de forma sostenible los ecosistemas, abordando desafíos sociales de manera efectiva y
+		adaptativa. Simultáneamente buscan proporcionar beneficios para el bienestar humano y la
+		biodiversidad.<br />
+		El concepto de SbN se caracteriza por entender y poner en práctica la dimensión multifuncional de
+		los componentes naturales en la ciudad, permitiendo conciliar la naturaleza con la ciudad, más allá
+		de un valor ornamental.<br />
+		Las SbN son una herramienta que nos permite enfrentar múltiples desafíos de nuestras ciudades: cambio
+		climático, riesgo de desastres, desarrollo económico y social, salud humana, seguridad alimentaria,
+		seguridad del agua y pérdida de biodiversidad. Aportan respuestas robustas y duraderas en acciones
+		relativas a los ecosistemas locales, que se concretan gracias a un doble enfoque: el bienestar humano
+		y la preservación de la biodiversidad local.<br />
+		<br />
+		Unlimited Cities busca democratizar el proceso de diseño de espacios urbanos facilitando el diálogo
+		con comunidades y actores locales. Este proceso de codiseño de ciudades permite incluir ideas locales,
+		resolviendo problemáticas puntuales a veces desapercibidas por el equipo técnico. También permite
+		generar un empoderamiento de la comunidad local sobre los espacios y su potencial de transformación
+		a largo plazo.<br />
+		Los proyectos urbanos participativos permiten expresar los deseos y necesidades de una comunidad
+		de individuos, lo cual sirve de base programática.<br />
+		Unlimited Cities facilita a todos expresar creativamente sus ideas para regenerar un espacio público
+		concreto, y permite compartirlas en transparencia. Su facilidad de uso la hace accesible para todos
+		y en múltiples lugares, abriendo el abanico de participantes a los procesos participativos y generando
+		un nuevo puente entre habitantes, expertos y autoridades.
+	</div>
+</div>
+<div id="description" class="bg-gray-300 pb-[100px] pt-[60px] text-[16px] text-gray-800">
+	<div class=" mx-auto w-full max-w-[780px] p-[10px]">
+		<h3 class="py-2 text-[1.4rem]">ABOUT UNLIMITED CITIES® SOFTWARE</h3>
+		<p>
+			Unlimited Cities® software is in the development phase. This free software, under the GNU
+			AGPL 3.0 license, is a functional prototype intended to explore and validate uses with the
+			various actors of urban transformations (citizens, professionals, authorities). Version 1.0
+			and following of the software are currently being planned and developed with the support of
+			<a href="https://7billion-urbanists.org/" target="_blank" class="underline">
+				https://7billion-urbanists.org/
+			</a>
+			and <a href="https://freeit.world" target="_blank" class="underline">https://freeit.world</a>.
+			<br />
+			Official web site:
+			<a href="http://unlimitedcities.world" target="_blank" class="underline"
+				>http://unlimitedcities.world</a
+			>
+		</p>
+		<h3 class="py-2 text-[1.4rem]">CREATION OF A DATABASE FOR ANALYSIS</h3>
+		<p>
+			This database contains your nickname, time and place where you made the mix, your mix, your
+			comment and tags. This database is available in open data and is useful to build analyses from
+			open data. Geolocation and date make it possible to sort out the mixes developed in the
+			project territory when accompanying mediators or mixes developed autonomously, including from
+			other territories. The database will not contain the nicknames, which will be anonymized. To
+			request an anonymized open dataset, simply ask here: contact@7-bu.org
+			<br /><br />
+			<i>www.DeepL.com/Translator</i>
+		</p>
+	</div>
+</div>
