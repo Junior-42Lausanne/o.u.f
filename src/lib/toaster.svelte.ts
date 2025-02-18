@@ -37,7 +37,7 @@ export const removeToast = (toast: ToastObj) => {
 	toasts.update((current) => current.filter((t) => t !== toast));
 };
 
-export const toastToColor = (type: 'success' | 'error' | 'info' | 'warning') => {
+export const typeToColor = (type: 'success' | 'error' | 'info' | 'warning') => {
 	switch (type) {
 		case 'success':
 			return 'green';
