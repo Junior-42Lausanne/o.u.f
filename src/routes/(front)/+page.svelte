@@ -1,5 +1,10 @@
+<script>
+	import { PUBLIC_SUPABASE_URL } from '$env/static/public';
+</script>
+
 <div
-	class="relative flex h-screen min-h-[600px] w-screen flex-col items-center justify-center bg-[url(https://supabasekong-agkss0c8goss80gkcsos4kko.deneria.net/storage/v1/object/public/projects/1/home.png)] bg-cover bg-center text-center"
+	class="relative flex h-screen min-h-[600px] w-screen flex-col items-center justify-center bg-cover bg-center text-center"
+	style="background-image: url({PUBLIC_SUPABASE_URL}/storage/v1/object/public/projects/1/home.png)"
 >
 	<h1 class="p-[10px] text-[2.6rem] text-white [text-shadow:_0_2px_10px_rgba(0,0,0,0.50)]">
 		Unlimited Cities para Interlace
