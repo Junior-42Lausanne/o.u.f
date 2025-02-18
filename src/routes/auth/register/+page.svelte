@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { invalidate } from '$app/navigation';
 	import { Input, Label, Helper, Button, Checkbox, A } from 'flowbite-svelte';
 	import { z } from 'zod';
 	import i18n from '$lib/i18n';
+	import { addToast } from '$lib/toaster.svelte.js';
 
 	const { data } = $props();
 	const { supabase } = data;
@@ -16,9 +16,6 @@
 	let work_link = $state<string>();
 	let join_network = $state(true);
 	let cgu = $state(false);
-
-	let errorMessage = $state('');
-	let successMessage = $state('');
 
 	async function handleFormSubmit(event: Event) {
 		event.preventDefault();
@@ -44,7 +41,7 @@
 			.safeParse({ email, password, password2, cgu, first_name, last_name, activity, work_link });
 
 		if (!result.success) {
-			errorMessage = result.error.issues[0].message;
+			addToast({ message: result.error.issues[0].message, type: 'error' });
 			return;
 		}
 
@@ -64,18 +61,17 @@
 			});
 
 			if (signUpError) {
-				errorMessage = $i18n.t('auth.register.error_sign_up');
+				addToast({ message: $i18n.t('auth.register.error_sign_up'), type: 'error' });
 				console.error(signUpError);
 				return;
 			}
 
-			successMessage = $i18n.t('auth.register.success_sign_up');
-			errorMessage = '';
+			addToast({ message: $i18n.t('auth.register.success_sign_up'), type: 'success' });
 			setTimeout(() => {
 				window.location.href = '/';
 			}, 1000);
 		} catch (err) {
-			errorMessage = $i18n.t('auth.register.error_sign_up');
+			addToast({ message: $i18n.t('auth.register.error_sign_up'), type: 'error' });
 			console.error(err);
 		}
 	}
@@ -84,12 +80,6 @@
 <div class="flex h-screen flex-col items-center justify-center">
 	<h1 class="text-4xl font-bold">{$i18n.t('auth.register.title')}</h1>
 	<form action="#" onsubmit={handleFormSubmit} class="mt-6 w-full max-w-sm">
-		{#if errorMessage}
-			<p class="mb-4 text-red-500">{errorMessage}</p>
-		{/if}
-		{#if successMessage}
-			<p class="mb-4 text-green-500">{successMessage}</p>
-		{/if}
 		<div class="mb-6">
 			<Label for="first_name" class="mb-2"
 				>{$i18n.t('auth.register.first_name_label')} <span class="text-red-500">*</span></Label

@@ -18,6 +18,7 @@
 	} from 'flowbite-svelte';
 	import { ExclamationCircleSolid } from 'flowbite-svelte-icons';
 	import i18n from '$lib/i18n';
+	import { addToast } from '$lib/toaster.svelte.js';
 
 	const { data } = $props();
 	const { translations: translationsSource, supabase, project, profile } = data;
@@ -54,7 +55,10 @@
 			else ({ error } = await supabase.from('translations').update(rest).eq('id', translation.id));
 
 			if (error || !data) {
-				alert($i18n.t('dashboard.project.[id].translations.error_saving'));
+				addToast({
+					message: $i18n.t('dashboard.project.[id].translations.error_saving'),
+					type: 'error'
+				});
 				console.error(error);
 				loading = false;
 				return;
@@ -78,7 +82,10 @@
 
 	async function handleCreateTranslation() {
 		if (new_translation.key === undefined || new_translation.key === '') {
-			alert($i18n.t('dashboard.project.[id].translations.error_key_required'));
+			addToast({
+				message: $i18n.t('dashboard.project.[id].translations.error_key_required'),
+				type: 'error'
+			});
 			return;
 		}
 
@@ -92,7 +99,10 @@
 			.select()
 			.single();
 		if (error || !data) {
-			alert($i18n.t('dashboard.project.[id].translations.error_creating'));
+			addToast({
+				message: $i18n.t('dashboard.project.[id].translations.error_creating'),
+				type: 'error'
+			});
 			console.error(error);
 		} else {
 			// Add the translation to the map

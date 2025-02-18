@@ -1,29 +1,30 @@
 <script lang="ts">
 	import { invalidate } from '$app/navigation';
+	import { addToast } from '$lib/toaster.svelte.js';
 	import { Input, Label, Helper, Button, Checkbox, A } from 'flowbite-svelte';
-	import { onMount } from 'svelte';
 
 	const { data } = $props();
 	const { supabase } = data;
 
 	let password = $state('');
 	let password2 = $state('');
-	let errorMessage = $state('');
-	let successMessage = $state('');
 
 	async function handleFormSubmit(event: Event) {
 		event.preventDefault();
 
 		try {
 			if (password != password2) {
-				errorMessage = 'Passwords do not match';
+				addToast({ message: 'Passwords do not match', type: 'error' });
 			}
 			const { data, error } = await supabase.auth.updateUser({
 				password
 			});
 
 			if (error) {
-				errorMessage = 'An error occurred while trying to change the password';
+				addToast({
+					message: 'An error occurred while trying to change the password',
+					type: 'error'
+				});
 				console.error(error);
 				return;
 			}
@@ -31,14 +32,17 @@
 			await supabase.auth.signOut();
 			invalidate('supabase:auth');
 
-			successMessage =
-				'Your password has been changed successfully, you can now login with your new password';
-			errorMessage = '';
+			addToast({
+				message:
+					'Your password has been changed successfully, you can now login with your new password',
+				type: 'success',
+				timeout: 2000
+			});
 			setTimeout(() => {
 				window.location.href = '/auth';
 			}, 2000);
 		} catch (err) {
-			errorMessage = 'An error occurred while trying to change the password';
+			addToast({ message: 'An error occurred while trying to change the password', type: 'error' });
 			console.error(err);
 		}
 	}
@@ -47,12 +51,6 @@
 <div class="flex h-screen flex-col items-center justify-center">
 	<h1 class="text-4xl font-bold">Reset password</h1>
 	<form action="#" onsubmit={handleFormSubmit} class="mt-6 w-full max-w-sm">
-		{#if errorMessage}
-			<p class="mb-4 text-red-500">{errorMessage}</p>
-		{/if}
-		{#if successMessage}
-			<p class="mb-4 text-green-500">{successMessage}</p>
-		{/if}
 		<div class="mb-6">
 			<Label for="password" class="mb-2">New password</Label>
 			<Input
