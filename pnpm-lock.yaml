@@ -35,6 +35,9 @@ importers:
       nodemailer:
         specifier: ^6.10.0
         version: 6.10.0
+      p5-svelte:
+        specifier: ^3.1.2
+        version: 3.1.2(@types/p5@1.7.6)(p5@1.11.3)
       svelte-i18next:
         specifier: ^2.2.2
         version: 2.2.2(i18next@24.2.2(typescript@5.7.3))(svelte@5.19.6)
@@ -66,6 +69,9 @@ importers:
       '@types/nodemailer':
         specifier: ^6.4.17
         version: 6.4.17
+      '@types/p5':
+        specifier: ^1.7.6
+        version: 1.7.6
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.5.1)
@@ -90,6 +96,9 @@ importers:
       globals:
         specifier: ^15.14.0
         version: 15.14.0
+      p5:
+        specifier: ^1.11.3
+        version: 1.11.3
       prettier:
         specifier: ^3.4.2
         version: 3.4.2
@@ -610,6 +619,9 @@ packages:
 
   '@types/nodemailer@6.4.17':
     resolution: {integrity: sha512-I9CCaIp6DTldEg7vyUTZi8+9Vo0hi1/T8gv3C89yk1rSAAzoKQ8H8ki/jBYJSFoH/BisgLP8tkZMlQ91CIquww==}
+
+  '@types/p5@1.7.6':
+    resolution: {integrity: sha512-6pLTOo0V3N5jZb5nTwjiv3lPHLK3Z/TjbhQUj8CTWXocUk1Z/f6OHTp3Pcwi1BhWnf5gqKUcyEb1gP0KIJuQgw==}
 
   '@types/phoenix@1.6.6':
     resolution: {integrity: sha512-PIzZZlEppgrpoT2QgbnDU+MMzuR6BbCjllj0bM70lWoejMeNJAxCchxnv7J3XFkI8MpygtRpzXrIlmWUBclP5A==}
@@ -1756,6 +1768,15 @@ packages:
     resolution: {integrity: sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw==}
     engines: {node: '>=10'}
 
+  p5-svelte@3.1.2:
+    resolution: {integrity: sha512-lcfWh+cJ1/wRdIXHnjpYmDgj2h3TCy1QJVQnf/cBcFWS8CSkvyAN5F8u8H2U8qBUtZ4XaD3nd+1NoYUMHaMExQ==}
+    peerDependencies:
+      '@types/p5': ^1.4.2
+      p5: ^1.4.0
+
+  p5@1.11.3:
+    resolution: {integrity: sha512-5eiyuZ3Pvo6ucr3nr8AzD+qwpoleiIEF2a2HmiO6PJM1tnbD0LmLlckZyYGJATs0tdmRjc37Muh6KPS4d1FHHg==}
+
   package-json-from-dist@1.0.1:
     resolution: {integrity: sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==}
 
@@ -2899,6 +2920,8 @@ snapshots:
   '@types/nodemailer@6.4.17':
     dependencies:
       '@types/node': 22.12.0
+
+  '@types/p5@1.7.6': {}
 
   '@types/phoenix@1.6.6': {}
 
@@ -4354,6 +4377,13 @@ snapshots:
   p-locate@5.0.0:
     dependencies:
       p-limit: 3.1.0
+
+  p5-svelte@3.1.2(@types/p5@1.7.6)(p5@1.11.3):
+    dependencies:
+      '@types/p5': 1.7.6
+      p5: 1.11.3
+
+  p5@1.11.3: {}
 
   package-json-from-dist@1.0.1: {}
 
