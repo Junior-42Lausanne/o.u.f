@@ -1,10 +1,18 @@
 <script lang="ts">
 	import i18n from '$lib/i18n';
+	import type { Database, Tables } from '$lib/supabase';
 	import { addToast } from '$lib/toaster.svelte';
 	import { languages } from '$lib/translation';
+	import { project_object } from '$lib/validator';
+	import type { SupabaseClient } from '@supabase/supabase-js';
 	import { Button, Checkbox, Input, Label, MultiSelect, Spinner } from 'flowbite-svelte';
 
-	const { project, can_edit, supabase } = $props();
+	const {
+		project,
+		can_edit,
+		supabase
+	}: { project: Tables<'projects'>; can_edit: boolean; supabase: SupabaseClient<Database> } =
+		$props();
 
 	let project_changed = $state(false);
 	let project_saving = $state(false);
@@ -13,6 +21,22 @@
 	async function handleProjectSave() {
 		project_saving = true;
 		const { id, name, url_prefix, restricted_premix_mode, ...rest } = project;
+
+		const result = project_object.partial().safeParse({
+			name,
+			url_prefix,
+			restricted_premix_mode,
+			languages: project_langs
+		});
+		if (!result.success) {
+			addToast({
+				message: result.error.issues[0].message,
+				type: 'error'
+			});
+			project_saving = false;
+			return;
+		}
+
 		const { data, error } = await supabase
 			.from('projects')
 			.update({ name, url_prefix, restricted_premix_mode, languages: project_langs })
@@ -51,6 +75,7 @@
 				placeholder="super_prefix"
 				bind:value={project.url_prefix}
 				oninput={() => (project_changed = true)}
+				autocomplete="off"
 			/>
 		</div>
 		<div class="mb-4">

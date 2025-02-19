@@ -16,6 +16,7 @@
 		TableHead,
 		TableHeadCell
 	} from 'flowbite-svelte';
+	import { z } from 'zod';
 
 	const { project, is_project_admin, is_supperadmin, profile, supabase } = $props();
 
@@ -59,6 +60,13 @@
 
 	async function handleInvite(e: Event) {
 		e.preventDefault();
+
+		const result = z.string().email().safeParse(invite_email);
+		if (!result.success) {
+			addToast({ message: 'Invalid email', type: 'error' });
+			return;
+		}
+
 		// Call /api/invite POST
 		const res = await fetch('/api/invite', {
 			method: 'POST',
@@ -66,7 +74,7 @@
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				email: invite_email,
+				email: result.data,
 				project_id: project.id,
 				is_admin: invite_is_admin == 'true'
 			})
