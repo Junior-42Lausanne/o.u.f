@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS public.languages (
+	id SMALLINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
+	code VARCHAR(2) NOT NULL UNIQUE -- https://en.wikipedia.org/wiki/ISO_639-1
+);
