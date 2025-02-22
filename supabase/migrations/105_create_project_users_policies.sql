@@ -5,7 +5,7 @@ SELECT
 		OR public.is_member_of_project (project_id)
 	);
 
-CREATE POLICY "Allow creating project_users" ON public.project_users FOR INSERT
+CREATE POLICY "Allow creating project_users" ON public.project_users FOR insert
 WITH
 	CHECK (
 		public.is_superadmin ()
@@ -25,28 +25,27 @@ WITH
 		)
 	);
 
-CREATE POLICY "Allow updating project_users" ON public.project_users FOR
-UPDATE USING (
+CREATE POLICY "Allow updating project_users" ON public.project_users
+FOR UPDATE
+	USING (
+		public.is_superadmin ()
+		OR public.is_member_of_project (project_id)
+	);
+
+CREATE POLICY "Allow deleting project_users" ON public.project_users FOR delete USING (
 	public.is_superadmin ()
 	OR public.is_member_of_project (project_id)
 );
 
-CREATE POLICY "Allow deleting project_users" ON public.project_users FOR DELETE USING (
-	public.is_superadmin ()
-	OR public.is_member_of_project (project_id)
-);
-
-CREATE OR REPLACE FUNCTION public.prevent_self_promotion ()
-RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION public.prevent_self_promotion () returns trigger AS $$
 BEGIN
 	IF OLD.user_id = NEW.user_id THEN
 		RAISE EXCEPTION 'Cannot promote or demote yourself';
 	END IF;
 	RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ language plpgsql;
 
-CREATE TRIGGER prevent_self_promotion_trigger
-BEFORE UPDATE OF role ON public.project_users
-FOR EACH ROW
-EXECUTE FUNCTION public.prevent_self_promotion ();
+CREATE TRIGGER prevent_self_promotion_trigger before
+UPDATE of role ON public.project_users FOR each ROW
+EXECUTE function public.prevent_self_promotion ();

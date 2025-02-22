@@ -1,8 +1,8 @@
 CREATE POLICY "Allow read translations" ON public.translations FOR
 SELECT
-	USING (true);
+	USING (TRUE);
 
-CREATE POLICY "Allow create translations" ON public.translations FOR INSERT USING (
+CREATE POLICY "Allow create translations" ON public.translations FOR insert USING (
 	public.is_superadmin ()
 	OR (
 		public.is_member_of_project (project_id)
@@ -10,16 +10,17 @@ CREATE POLICY "Allow create translations" ON public.translations FOR INSERT USIN
 	)
 );
 
-CREATE POLICY "Allow update translations" ON public.translations FOR
-UPDATE USING (
-	public.is_superadmin ()
-	OR (
-		public.is_member_of_project (project_id)
-		AND project_id IS NOT NULL
-	)
-);
+CREATE POLICY "Allow update translations" ON public.translations
+FOR UPDATE
+	USING (
+		public.is_superadmin ()
+		OR (
+			public.is_member_of_project (project_id)
+			AND project_id IS NOT NULL
+		)
+	);
 
-CREATE POLICY "Allow delete translations" ON public.translations FOR DELETE USING (
+CREATE POLICY "Allow delete translations" ON public.translations FOR delete USING (
 	public.is_superadmin ()
 	OR (
 		public.is_member_of_project (project_id)

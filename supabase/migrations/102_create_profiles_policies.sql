@@ -22,7 +22,7 @@ SELECT
 		)
 	);
 
-CREATE POLICY "Allow creating profiles" ON public.profiles FOR INSERT
+CREATE POLICY "Allow creating profiles" ON public.profiles FOR insert
 WITH
 	CHECK (
 		public.is_superadmin ()
@@ -32,14 +32,15 @@ WITH
 		) = id
 	);
 
-CREATE POLICY "Allow updating profiles" ON public.profiles FOR
-UPDATE USING (
-	public.is_superadmin ()
-	OR (
-		SELECT
-			auth.uid ()
-	) = id
-)
+CREATE POLICY "Allow updating profiles" ON public.profiles
+FOR UPDATE
+	USING (
+		public.is_superadmin ()
+		OR (
+			SELECT
+				auth.uid ()
+		) = id
+	)
 WITH
 	CHECK (
 		public.is_superadmin ()
@@ -60,6 +61,7 @@ BEGIN
     RETURN NEW;
 END;
 $$;
+
 -- Attach the trigger to the profiles table
 CREATE TRIGGER prevent_superadmin_update_trigger before
 UPDATE ON public.profiles FOR each ROW
