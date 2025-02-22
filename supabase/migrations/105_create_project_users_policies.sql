@@ -47,5 +47,5 @@ END;
 $$ language plpgsql;
 
 CREATE TRIGGER prevent_self_promotion_trigger before
-UPDATE of role ON public.project_users FOR each ROW
+UPDATE ON public.project_users FOR each ROW
 EXECUTE function public.prevent_self_promotion ();

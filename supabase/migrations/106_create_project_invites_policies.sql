@@ -38,7 +38,7 @@ CREATE POLICY "Allow deleting project_invites" ON public.project_invites FOR del
 
 CREATE OR REPLACE FUNCTION public.prevent_invite_member () returns trigger AS $$
 BEGIN
-	IF EXISTS (SELECT 1 IN project_users WHERE project_id = NEW.project_id AND user_id = NEW.user_id) THEN
+	IF EXISTS (SELECT 1 FROM project_users WHERE project_id = NEW.project_id AND user_id = NEW.user_id) THEN
 		RAISE EXCEPTION 'Cannot invite a user that is already a member of the project';
 	END IF;
 	RETURN NEW;
