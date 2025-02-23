@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Tables } from '$lib/supabase';
+	import { addToast } from '$lib/toaster.svelte';
 	import {
 		Button,
 		ButtonGroup,
@@ -15,6 +16,7 @@
 		TableHead,
 		TableHeadCell
 	} from 'flowbite-svelte';
+	import { z } from 'zod';
 
 	const { project, is_project_admin, is_supperadmin, profile, supabase } = $props();
 
@@ -38,7 +40,7 @@
 
 		if (error) {
 			console.error('error', error);
-			alert('Error saving user');
+			addToast({ message: 'Error saving user', type: 'error' });
 		} else {
 			edit_user_modal = false;
 			location.reload();
@@ -50,7 +52,7 @@
 		const { error } = await supabase.from('project_users').delete().eq('id', user.id);
 		if (error) {
 			console.error('error', error);
-			alert('Error removing user');
+			addToast({ message: 'Error removing user', type: 'error' });
 		} else {
 			location.reload();
 		}
@@ -58,6 +60,13 @@
 
 	async function handleInvite(e: Event) {
 		e.preventDefault();
+
+		const result = z.string().email().safeParse(invite_email);
+		if (!result.success) {
+			addToast({ message: 'Invalid email', type: 'error' });
+			return;
+		}
+
 		// Call /api/invite POST
 		const res = await fetch('/api/invite', {
 			method: 'POST',
@@ -65,16 +74,16 @@
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				email: invite_email,
+				email: result.data,
 				project_id: project.id,
 				is_admin: invite_is_admin == 'true'
 			})
 		});
 
 		if (res.ok) {
-			alert('User invited');
+			addToast({ message: 'User invited', type: 'success' });
 		} else {
-			alert('Error inviting user');
+			addToast({ message: 'Error inviting user', type: 'error' });
 			console.error(await res.json());
 		}
 	}
