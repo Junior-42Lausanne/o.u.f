@@ -29,9 +29,11 @@ export const addToast = (toast: Partial<ToastData>) => {
 		initial_timeout: toast.timeout || 5000
 	});
 	toasts.update((current) => [...current, full]);
-	if (full.initial_timeout) setTimeout(() => {
-		removeToast(full);
-	}, full.timeout);
+	if (full.initial_timeout) {
+		setTimeout(() => {
+			removeToast(full);
+		}, full.timeout);
+	}
 };
 
 export const removeToast = (toast: ToastData) => {
