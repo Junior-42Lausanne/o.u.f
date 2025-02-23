@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { Input, Label, Helper, Button, Checkbox, A } from 'flowbite-svelte';
 	import i18n from '$lib/i18n';
+	import { addToast } from '$lib/toaster.svelte';
 
 	const { data } = $props();
 	const { supabase } = data;
 
 	let email = $state('');
 	let password = $state('');
-	let errorMessage = $state('');
-	let successMessage = $state('');
 
 	async function handleFormSubmit(event: Event) {
 		event.preventDefault();
@@ -20,16 +19,13 @@
 			});
 
 			if (signInError) {
-				errorMessage = signInError.message; // Fixme: Show proper error message based on error code
+				addToast({ message: signInError.message, type: 'error' });
 				return;
 			}
 
-			successMessage = $i18n.t('auth.success_sign_in');
-			setTimeout(() => {
-				window.location.href = '/dashboard';
-			}, 1000);
+			window.location.href = '/dashboard';
 		} catch (err) {
-			errorMessage = $i18n.t('auth.error_sign_in');
+			addToast({ message: $i18n.t('auth.error_sign_in'), type: 'error' });
 			console.error(err);
 		}
 	}
@@ -38,12 +34,6 @@
 <div class="flex h-screen flex-col items-center justify-center">
 	<h1 class="text-4xl font-bold">{$i18n.t('auth.title')}</h1>
 	<form action="#" onsubmit={handleFormSubmit} class="mt-6 w-full max-w-sm">
-		{#if errorMessage}
-			<p class="mb-4 text-red-500">{errorMessage}</p>
-		{/if}
-		{#if successMessage}
-			<p class="mb-4 text-green-500">{successMessage}</p>
-		{/if}
 		<div class="mb-6">
 			<Label for="email" class="mb-2">{$i18n.t('auth.email_label')}</Label>
 			<Input

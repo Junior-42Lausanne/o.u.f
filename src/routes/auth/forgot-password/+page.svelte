@@ -1,33 +1,29 @@
 <script lang="ts">
 	import { Input, Label, Helper, Button, Checkbox, A } from 'flowbite-svelte';
-	import { onMount } from 'svelte';
 	import i18n from '$lib/i18n';
+	import { addToast } from '$lib/toaster.svelte.js';
 
 	const { data } = $props();
 	const { supabase } = data;
 
 	let email = $state('');
-	let errorMessage = $state('');
-	let successMessage = $state('');
 
 	async function handleFormSubmit(event: Event) {
 		event.preventDefault();
 
 		try {
-			const { data: forgotPasswordData, error: forgotPasswordError } =
-				await supabase.auth.resetPasswordForEmail(email, {
-					redirectTo: window.location.origin + '/auth/reset-password'
-				});
+			const { error: forgotPasswordError } = await supabase.auth.resetPasswordForEmail(email, {
+				redirectTo: window.location.origin + '/auth/reset-password'
+			});
 
 			if (forgotPasswordError) {
-				errorMessage = forgotPasswordError.message;
+				addToast({ message: forgotPasswordError.message, type: 'error' });
 				return;
 			}
 
-			successMessage = $i18n.t('auth.forgot-password.success_message');
-			errorMessage = '';
+			addToast({ message: $i18n.t('auth.forgot-password.success_message'), type: 'success' });
 		} catch (err) {
-			errorMessage = $i18n.t('auth.forgot-password.error_message');
+			addToast({ message: $i18n.t('auth.forgot-password.error_message'), type: 'error' });
 			console.error(err);
 		}
 	}
@@ -36,12 +32,6 @@
 <div class="flex h-screen flex-col items-center justify-center">
 	<h1 class="text-4xl font-bold">{$i18n.t('auth.forgot-password.title')}</h1>
 	<form action="#" onsubmit={handleFormSubmit} class="mt-6 w-full max-w-sm">
-		{#if errorMessage}
-			<p class="mb-4 text-red-500">{errorMessage}</p>
-		{/if}
-		{#if successMessage}
-			<p class="mb-4 text-green-500">{successMessage}</p>
-		{/if}
 		<div class="mb-6">
 			<Label for="email" class="mb-2">{$i18n.t('auth.forgot-password.email_label')}</Label>
 			<Input
