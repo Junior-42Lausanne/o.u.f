@@ -12,8 +12,8 @@
 	let password2 = $state('');
 	let first_name = $state('');
 	let last_name = $state('');
-	let activity = $state('');
-	let work_link = $state<string>();
+	let main_professional_activity = $state('');
+	let professional_link = $state<string>();
 	let join_network = $state(true);
 	let cgu = $state(false);
 
@@ -38,10 +38,22 @@
 				}),
 				first_name: z.string().min(2, $i18n.t('auth.register.error_first_name')),
 				last_name: z.string().min(2, $i18n.t('auth.register.error_last_name')),
-				activity: z.string().min(2, $i18n.t('auth.register.error_activity')),
-				work_link: z.string().url($i18n.t('auth.register.error_invalid_worklink')).optional()
+				main_professional_activity: z.string().min(2, $i18n.t('auth.register.error_activity')),
+				professional_link: z
+					.string()
+					.url($i18n.t('auth.register.error_invalid_worklink'))
+					.optional()
 			})
-			.safeParse({ email, password, password2, cgu, first_name, last_name, activity, work_link });
+			.safeParse({
+				email,
+				password,
+				password2,
+				cgu,
+				first_name,
+				last_name,
+				main_professional_activity,
+				professional_link
+			});
 
 		if (!result.success) {
 			errorMessage = result.error.issues[0].message;
@@ -56,8 +68,8 @@
 					data: {
 						first_name,
 						last_name,
-						activity,
-						work_link,
+						main_professional_activity,
+						professional_link,
 						join_network
 					}
 				}
@@ -123,7 +135,7 @@
 				id="activity"
 				placeholder={$i18n.t('auth.register.activity_placeholder')}
 				required
-				bind:value={activity}
+				bind:value={main_professional_activity}
 			/>
 		</div>
 		<div class="mb-6">
@@ -132,7 +144,7 @@
 				type="text"
 				id="work_link"
 				placeholder={$i18n.t('auth.register.work_link_placeholder')}
-				bind:value={work_link}
+				bind:value={professional_link}
 			/>
 		</div>
 		<div class="mb-6">
