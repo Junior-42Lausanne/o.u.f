@@ -14,8 +14,6 @@ ALTER TABLE public.project_users enable ROW level security;
 
 CREATE INDEX idx_project_users_combo ON public.project_users (project_id, user_id);
 
-CREATE INDEX idx_project_users_admin_level ON public.project_users (project_id, admin_level);
-
 CREATE INDEX idx_project_users_reverse ON public.project_users (user_id, project_id);
 
 -- For cross-project membership checks in profile policy

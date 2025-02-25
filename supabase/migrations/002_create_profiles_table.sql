@@ -7,10 +7,10 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 	first_name TEXT NOT NULL,
 	last_name TEXT NOT NULL,
 	avatar TEXT,
-	join_network BOOLEAN NOT NULL DEFAULT TRUE, -- default true ?
+	join_network BOOLEAN NOT NULL DEFAULT TRUE,
 	language_id SMALLINT,
-	activity TEXT, -- nom + explicit (genre profesionnal activity...)
-	work_link TEXT,
+	main_professional_activity TEXT,
+	professional_link TEXT,
 	FOREIGN key (id) REFERENCES auth.users (id) ON UPDATE cascade ON DELETE cascade,
 	FOREIGN key (language_id) REFERENCES public.languages (id) ON UPDATE cascade ON DELETE SET NULL
 );
@@ -27,9 +27,9 @@ CREATE OR REPLACE FUNCTION public.handle_new_user () returns trigger language pl
 SET
 	search_path = '' AS $$
 begin
-  insert into public.profiles (id, first_name, last_name, email, activity, work_link, join_network)
+  insert into public.profiles (id, first_name, last_name, email, main_professional_activity, professional_link, join_network)
   values (new.id, new.raw_user_meta_data ->> 'first_name', new.raw_user_meta_data ->> 'last_name', new.email,
-			new.raw_user_meta_data ->> 'activity', new.raw_user_meta_data ->> 'work_link', (new.raw_user_meta_data ->> 'join_network')::boolean);
+			new.raw_user_meta_data ->> 'main_professional_activity', new.raw_user_meta_data ->> 'professional_link', (new.raw_user_meta_data ->> 'join_network')::boolean);
   return new;
 end;
 $$;
@@ -38,3 +38,8 @@ $$;
 CREATE TRIGGER on_auth_user_created
 AFTER insert ON auth.users FOR each ROW
 EXECUTE procedure public.handle_new_user ();
+
+CREATE TRIGGER on_auth_user_updated
+AFTER
+UPDATE ON auth.users FOR each ROW
+EXECUTE procedure public.auto_update_at ();
