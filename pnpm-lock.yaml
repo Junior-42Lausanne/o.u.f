@@ -14,9 +14,15 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.48.1
         version: 2.48.1
+      '@types/easeljs':
+        specifier: ^1.0.5
+        version: 1.0.5
       axios:
         specifier: ^1.7.9
         version: 1.7.9
+      easeljs:
+        specifier: ^1.0.2
+        version: 1.0.2
       html-to-text:
         specifier: ^9.0.5
         version: 9.0.5
@@ -587,6 +593,12 @@ packages:
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
 
+  '@types/createjs-lib@0.0.33':
+    resolution: {integrity: sha512-mvK1sn2qSyGPwctg/MsjAP5m3/TBx83eB0hcEdZ6UqpuzQqCUWpVyyQddqkbAsKRpMECK0s7JosYXoTtIuNbhw==}
+
+  '@types/easeljs@1.0.5':
+    resolution: {integrity: sha512-YRWGkZdq4trhJhieE0NdLTbOp5zT5yunPJKNqQJWq/X8y7qlmGeQB8hPnQHzMbW9iY38ZV91oXgW7V3U5VY2uw==}
+
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
 
@@ -619,6 +631,9 @@ packages:
 
   '@types/symlink-or-copy@1.2.2':
     resolution: {integrity: sha512-MQ1AnmTLOncwEf9IVU+B2e4Hchrku5N67NkgcAHW0p3sdzPe0FNMANxEm6OJUzPniEQGkeT3OROLlCwZJLWFZA==}
+
+  '@types/tweenjs@1.0.8':
+    resolution: {integrity: sha512-/HTVWu8c+AUJFK9P6b3LRzfodAYwDogtQKoH3ovZmnOY4aNJf+k3VqPx+D+AsLZP06AmoSLzqu9n/E5XCglCZw==}
 
   '@types/ws@8.5.14':
     resolution: {integrity: sha512-bd/YFLW+URhBzMXurx7lWByOu+xzU9+kb3RboOteXYDfW+tr+JZa99OyNmPINEGB/ahzKrEuc8rcv4gnpJmxTw==}
@@ -1002,6 +1017,9 @@ packages:
 
   domutils@3.2.2:
     resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
+
+  easeljs@1.0.2:
+    resolution: {integrity: sha512-PQTsiud32vrUIqZCbynjOJjCzoEp0xH+MRusRCdsZ1MzL4LCE2vp4Sa5cr6aShB3mK4vMZ8LFPnts4xuFhjEmg==}
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
@@ -2878,6 +2896,13 @@ snapshots:
 
   '@types/cookie@0.6.0': {}
 
+  '@types/createjs-lib@0.0.33': {}
+
+  '@types/easeljs@1.0.5':
+    dependencies:
+      '@types/createjs-lib': 0.0.33
+      '@types/tweenjs': 1.0.8
+
   '@types/estree@1.0.6': {}
 
   '@types/html-to-text@9.0.4': {}
@@ -2905,6 +2930,10 @@ snapshots:
   '@types/resolve@1.20.2': {}
 
   '@types/symlink-or-copy@1.2.2': {}
+
+  '@types/tweenjs@1.0.8':
+    dependencies:
+      '@types/createjs-lib': 0.0.33
 
   '@types/ws@8.5.14':
     dependencies:
@@ -3334,6 +3363,8 @@ snapshots:
       dom-serializer: 2.0.0
       domelementtype: 2.3.0
       domhandler: 5.0.3
+
+  easeljs@1.0.2: {}
 
   eastasianwidth@0.2.0: {}
 

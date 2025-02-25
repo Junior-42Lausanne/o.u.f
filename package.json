@@ -46,7 +46,9 @@
 	"dependencies": {
 		"@supabase/ssr": "^0.5.2",
 		"@supabase/supabase-js": "^2.48.1",
+		"@types/easeljs": "^1.0.5",
 		"axios": "^1.7.9",
+		"easeljs": "^1.0.2",
 		"html-to-text": "^9.0.5",
 		"i18next": "^24.2.2",
 		"i18next-http-backend": "^3.0.2",
