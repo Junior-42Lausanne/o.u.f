@@ -1,150 +1,126 @@
-/*
-Path : /src/easeljs/containers
+import MainStage from '../stages/MainStage';
 
-Copyright (C) 2019 | Unlimited Cities® | Alain Renk | <alain.renk@7-bu.org>
-
-Developer: Nicoals Ancel <email@adress>
-Supported by: https://7billion-urbanists.org/ and https://freeit.world
-
-This file is part of Unlimited Cities® software.
-
-Unlimited Cities® is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Unlimited Cities® is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with Unlimited Cities®. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-import MainStage from "../stages/MainStage";
-import { setObjectActive } from "../../actions";
-import { store, getCurrentLanguage } from "../../store";
-
-import ToolsStage from "../stages/ToolsStage";
-import BitmapEditable from "../containers/BitmapEditable";
-
-let createjs = window.createjs;
+import ToolsStage from '../stages/ToolsStage';
+import BitmapEditable from '../containers/BitmapEditable';
 
 const marginTop = 85;
 
 export default class ObjectPreview extends createjs.Container {
-  constructor(imagePath, title, description, metricTags = []) {
-    super();
+	filename: string;
 
-    store.dispatch(
-      setObjectActive({
-        title,
-        description,
-        metricTags,
-      }),
-    );
+	constructor(
+		imagePath: string,
+		title: { [lang: string]: string },
+		description: { [lang: string]: string },
+		metricTags: string[] = []
+	) {
+		super();
 
-    this.x = 0;
-    this.y = marginTop;
-    this.filename = imagePath;
+		// store.dispatch(
+		// 	setObjectActive({
+		// 		title,
+		// 		description,
+		// 		metricTags
+		// 	})
+		// );
 
-    let previewImage = new Image();
-    previewImage.src = `${imagePath}.png`;
+		this.x = 0;
+		this.y = marginTop;
+		this.filename = imagePath;
 
-    previewImage.onload = (e) => {
-      let bitmap = new createjs.Bitmap(previewImage);
-      const { width, height } = previewImage;
-      const maxWidthAndHeight = ObjectPreview.maxWidthAndHeight;
+		let previewImage = new Image();
+		previewImage.src = `${imagePath}.png`;
 
-      // RESIZE IMAGE IF TOO BIG
-      let scale = 1;
+		previewImage.onload = (e: any) => {
+			let bitmap = new createjs.Bitmap(previewImage);
+			const { width, height } = previewImage;
+			const maxWidthAndHeight = ObjectPreview.maxWidthAndHeight;
 
-      if (height * scale > maxWidthAndHeight) {
-        scale = maxWidthAndHeight / height;
-      }
+			// RESIZE IMAGE IF TOO BIG
+			let scale = 1;
 
-      if (width * scale > maxWidthAndHeight) {
-        scale = maxWidthAndHeight / width;
-      }
+			if (height * scale > maxWidthAndHeight) {
+				scale = maxWidthAndHeight / height;
+			}
 
-      bitmap.scaleY = scale;
-      bitmap.scaleX = scale;
+			if (width * scale > maxWidthAndHeight) {
+				scale = maxWidthAndHeight / width;
+			}
 
-      bitmap.regY = height / 2;
-      bitmap.regX = width / 2;
-      bitmap.y = 354 / 2;
-      bitmap.x = 400;
+			bitmap.scaleY = scale;
+			bitmap.scaleX = scale;
 
-      const language = getCurrentLanguage();
+			bitmap.regY = height / 2;
+			bitmap.regX = width / 2;
+			bitmap.y = 354 / 2;
+			bitmap.x = 400;
 
-      if (title[language] || description[language] || metricTags.length) {
-        bitmap.x = 65 + 354 / 2;
-      }
+			const language = 'en'; // TODO: Replace with current language
 
-      this.addChild(bitmap);
+			if (title[language] || description[language] || metricTags.length) {
+				bitmap.x = 65 + 354 / 2;
+			}
 
-      let toolStage = ToolsStage.currentStage;
+			this.addChild(bitmap);
 
-      bitmap.on("pressmove", (e) => {
-        bitmap.x = e.stageX - bitmap.mouseDifferenceToOrigin.x;
-        bitmap.y = e.stageY - bitmap.mouseDifferenceToOrigin.y;
-      });
+			let toolStage = ToolsStage.currentStage!;
 
-      bitmap.on("mousedown", (e) => {
-        store.dispatch(
-          setObjectActive({
-            title: "",
-            description: "",
-            metricTags: [],
-          }),
-        );
+			bitmap.on('pressmove', (e: any) => {
+				// @ts-ignore
+				bitmap.x = e.stageX - bitmap.mouseDifferenceToOrigin.x;
+				// @ts-ignore
+				bitmap.y = e.stageY - bitmap.mouseDifferenceToOrigin.y;
+			});
 
-        bitmap.mouseDifferenceToOrigin = {
-          x: e.stageX - bitmap.x,
-          y: e.stageY - bitmap.y,
-        };
+			bitmap.on('mousedown', (e) => {
+				// store.dispatch(
+				// 	setObjectActive({
+				// 		title: '',
+				// 		description: '',
+				// 		metricTags: []
+				// 	})
+				// );
 
-        const oldScaleX = bitmap.scaleX;
-        const oldScaleY = bitmap.scaleY;
+				// @ts-ignore
+				bitmap.mouseDifferenceToOrigin = {
+					// @ts-ignore
+					x: e.stageX - bitmap.x,
+					// @ts-ignore
+					y: e.stageY - bitmap.y
+				};
 
-        createjs.Tween.get(bitmap).to(
-          { scaleX: oldScaleX * 0.8, scaleY: oldScaleY * 0.8 },
-          200,
-        );
+				const oldScaleX = bitmap.scaleX;
+				const oldScaleY = bitmap.scaleY;
 
-        toolStage.removeChild(
-          toolStage.listObjectThumbnail,
-          toolStage.backgroundContainer,
-        );
-      });
+				createjs.Tween.get(bitmap).to({ scaleX: oldScaleX * 0.8, scaleY: oldScaleY * 0.8 }, 200);
 
-      bitmap.on("pressup", (e) => {
-        let bitmapEditable = new BitmapEditable(bitmap.image.src);
-        bitmapEditable.x =
-          bitmap.x - MainStage.currentStage.x + MainStage.currentStage.regX;
-        bitmapEditable.y = bitmap.y + marginTop;
-        bitmapEditable.scaleX = bitmap.scaleX;
-        bitmapEditable.scaleY = bitmap.scaleY;
-        bitmapEditable.regX = bitmap.regX;
-        bitmapEditable.regY = bitmap.regY;
-        bitmapEditable.filename = this.filename.substring(
-          this.filename.lastIndexOf("/") + 1,
-        );
+				toolStage.removeChild(toolStage.listObjectThumbnail!, toolStage.backgroundContainer!);
+			});
 
-        var image = new Image();
-        image.src = bitmap.image.src;
-        image.onload = (e) => {
-          BitmapEditable.displayBoundingBox(bitmapEditable);
-        };
+			bitmap.on('pressup', (e) => {
+				let bitmapEditable = new BitmapEditable((bitmap.image as HTMLImageElement).src);
+				bitmapEditable.x = bitmap.x - MainStage.currentStage!.x + MainStage.currentStage!.regX;
+				bitmapEditable.y = bitmap.y + marginTop;
+				bitmapEditable.scaleX = bitmap.scaleX;
+				bitmapEditable.scaleY = bitmap.scaleY;
+				bitmapEditable.regX = bitmap.regX;
+				bitmapEditable.regY = bitmap.regY;
+				bitmapEditable.filename = this.filename.substring(this.filename.lastIndexOf('/') + 1);
 
-        MainStage.currentStage.saveSerializedStage();
-        toolStage.closeToolStage();
-      });
-    };
-  }
+				var image = new Image();
+				image.src = (bitmap.image as HTMLImageElement).src;
+				image.onload = (e) => {
+					BitmapEditable.displayBoundingBox(bitmapEditable);
+				};
 
-  static get maxWidthAndHeight() {
-    return 354;
-  }
+				MainStage.currentStage!.saveSerializedStage();
+				// @ts-ignore
+				toolStage!.closeToolStage();
+			});
+		};
+	}
+
+	static get maxWidthAndHeight() {
+		return 354;
+	}
 }

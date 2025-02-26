@@ -1,11 +1,13 @@
 import GalleryStage from '../stages/GalleryStage';
 
-let createjs = window.createjs;
 export default class BitmapView extends createjs.Bitmap {
 	static parent: createjs.Container;
 	static background: createjs.Shape = new createjs.Shape();
 	static oldObject: createjs.Bitmap | null = null;
 	static oldObjectIndex: number | null = null;
+
+	filename: string = '';
+	crossOrigin: string = '';
 
 	constructor(imageOrUri: string | Object) {
 		super(imageOrUri);
@@ -48,7 +50,7 @@ export default class BitmapView extends createjs.Bitmap {
 			return element.filename === filename;
 		});
 
-		GalleryStage.currentStage.onObjectClick();
+		// GalleryStage.currentStage!.onObjectClick();
 
 		// store.dispatch(
 		// 	setObjectActive({

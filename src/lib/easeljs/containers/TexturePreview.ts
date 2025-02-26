@@ -1,35 +1,9 @@
-/*
-Path : /src/easeljs/containers
-
-Copyright (C) 2019 | Unlimited Cities® | Alain Renk | <alain.renk@7-bu.org>
-
-Developer: Nicoals Ancel <email@adress>
-Supported by: https://7billion-urbanists.org/ and https://freeit.world
-
-This file is part of Unlimited Cities® software.
-
-Unlimited Cities® is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Unlimited Cities® is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with Unlimited Cities®. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-import ToolsStage from "../stages/ToolsStage";
-import MainStage from "../stages/MainStage";
-import TextureEditable from "./TextureEditable";
-
-let createjs = window.createjs;
+import ToolsStage from '../stages/ToolsStage';
+import MainStage from '../stages/MainStage';
+import TextureEditable from './TextureEditable';
 
 export default class TexturePreview extends createjs.Container {
-	constructor(imagePath) {
+	constructor(imagePath: string) {
 		super();
 
 		this.x = 0;
@@ -37,7 +11,7 @@ export default class TexturePreview extends createjs.Container {
 
 		let previewImage = new Image();
 		previewImage.src = `${imagePath}.png`;
-		previewImage.crossOrigin = "Anonymous";
+		previewImage.crossOrigin = 'Anonymous';
 
 		previewImage.onload = (e) => {
 			let bitmap = new createjs.Bitmap(previewImage);
@@ -49,30 +23,32 @@ export default class TexturePreview extends createjs.Container {
 			bitmap.regX = 400;
 
 			let mask = new createjs.Shape();
-			mask.graphics.beginFill("#000").drawCircle(400, 250, 135);
+			mask.graphics.beginFill('#000').drawCircle(400, 250, 135);
 
 			this.addChild(bitmap);
 			bitmap.mask = mask;
 
 			let toolStage = ToolsStage.currentStage;
 
-			bitmap.on("mousedown", (e) => {
-				toolStage.removeAllChildren();
+			// @ts-ignore
+			bitmap.on('mousedown', (e) => {
+				toolStage!.removeAllChildren();
 
+				// @ts-ignore
 				let texture = new TextureEditable(e.target.image.src);
 				let poly = texture.customMask;
 
-				toolStage.addChild(poly);
+				toolStage!.addChild(poly);
 
 				const HANDLES_SIZE = 8;
 				const HANDLES_HIT = 18;
-				const HANDLES_STROKE_COLOR = "white";
-				const HANDLES_FILL_COLORS = "#838383";
+				const HANDLES_STROKE_COLOR = 'white';
+				const HANDLES_FILL_COLORS = '#838383';
 
 				let handle_idx = 0;
 
 				let hit = new createjs.Shape();
-				hit.graphics.beginFill("#000").drawCircle(0, 0, HANDLES_HIT);
+				hit.graphics.beginFill('#000').drawCircle(0, 0, HANDLES_HIT);
 
 				let handleModel = new createjs.Shape();
 				handleModel.graphics
@@ -82,7 +58,8 @@ export default class TexturePreview extends createjs.Container {
 					.drawCircle(0, 0, HANDLES_SIZE);
 				handleModel.hitArea = hit;
 
-				toolStage.on("stagemousedown", (e) => {
+				// @ts-ignore
+				toolStage.on('stagemousedown', (e: any) => {
 					if (e.relatedTarget) {
 						return null;
 					}
@@ -90,33 +67,33 @@ export default class TexturePreview extends createjs.Container {
 					let handle = handleModel.clone();
 					handle.x = e.stageX;
 					handle.y = e.stageY;
+					// @ts-ignore
 					handle.idx = handle_idx++;
 
-					const xOffset =
-						-MainStage.currentStage.x + MainStage.currentStage.regX;
+					const xOffset = -MainStage.currentStage!.x + MainStage.currentStage!.regX;
 
-					handle.on("pressmove", (e) => {
+					handle.on('pressmove', (e: any) => {
 						handle.x = e.stageX;
 						handle.y = e.stageY;
 
-						const instructionLength =
-							texture.customMask.graphics._activeInstructions.length;
-						texture.customMask.graphics._activeInstructions[handle.idx].x =
-							e.stageX + xOffset;
-						texture.customMask.graphics._activeInstructions[handle.idx].y =
-							e.stageY;
+						// @ts-ignore
+						const instructionLength = texture.customMask.graphics._activeInstructions.length;
+						// @ts-ignore
+						texture.customMask.graphics._activeInstructions[handle.idx].x = e.stageX + xOffset;
+						// @ts-ignore
+						texture.customMask.graphics._activeInstructions[handle.idx].y = e.stageY;
 
+						// @ts-ignore
 						if (handle.idx === 0) {
-							texture.customMask.graphics._activeInstructions[
-								instructionLength - 1
-							].x = e.stageX + xOffset;
-							texture.customMask.graphics._activeInstructions[
-								instructionLength - 1
-							].y = e.stageY;
+							// @ts-ignore
+							texture.customMask.graphics._activeInstructions[instructionLength - 1].x =
+								e.stageX + xOffset;
+							// @ts-ignore
+							texture.customMask.graphics._activeInstructions[instructionLength - 1].y = e.stageY;
 						}
 					});
 
-					toolStage.addChild(handle);
+					toolStage!.addChild(handle);
 					texture.drawTexture(e);
 				});
 			});

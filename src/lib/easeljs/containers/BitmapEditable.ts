@@ -12,6 +12,7 @@ export default class BitmapEditable extends createjs.Bitmap {
 		  }
 		| undefined;
 	static parent: createjs.Container;
+	filename: string = '';
 
 	constructor(imageOrUri: string | Object) {
 		super(imageOrUri);

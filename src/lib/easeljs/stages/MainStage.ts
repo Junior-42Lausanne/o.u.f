@@ -1,183 +1,164 @@
-/*
-Path : /src/easeljs/stages
+import BitmapEditable from '../containers/BitmapEditable';
+import ListObjectThumbnail from '../containers/ListObjectThumbnail';
+import TextureEditable from '../containers/TextureEditable';
 
-Copyright (C) 2019 | Unlimited Cities® | Alain Renk | <alain.renk@7-bu.org>
-
-Developer: Nicoals Ancel <email@adress>
-Supported by: https://7billion-urbanists.org/ and https://freeit.world
-
-This file is part of Unlimited Cities® software.
-
-Unlimited Cities® is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Unlimited Cities® is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with Unlimited Cities®. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-import {
-  setMixSerialized,
-  setMixTotalWidth,
-  setMixPositionX,
-} from "../../actions";
-import { store } from "../../store";
-
-import BitmapEditable from "../containers/BitmapEditable";
-import ListObjectThumbnail from "../containers/ListObjectThumbnail";
-import TextureEditable from "../containers/TextureEditable";
-
-let createjs = window.createjs;
 export default class MainStage extends createjs.Stage {
-  constructor(canvasId, backgroundDataURI, serialized) {
-    super(canvasId);
+	serialized: any;
+	containerTextures: createjs.Container | undefined;
+	containerObjects: createjs.Container | undefined;
+	totalWidth: number = 0;
+	static _currentStage: MainStage | null;
 
-    this.serialized = serialized;
+	constructor(
+		canvasId: string | Object | HTMLCanvasElement,
+		backgroundDataURI: string,
+		serialized: any
+	) {
+		super(canvasId);
 
-    createjs.Ticker.framerate = 60;
-    createjs.Ticker.on("tick", (e) => {
-      this.update(e);
-    });
+		this.serialized = serialized;
 
-    this.on("stagemouseup", function (event) {
-      if (!event.relatedTarget) {
-        BitmapEditable.boundingBox = null;
-        TextureEditable.boundingBox = null;
-      }
-    });
+		createjs.Ticker.framerate = 60;
+		createjs.Ticker.on('tick', (e) => {
+			this.update(e);
+		});
 
-    createjs.Touch.enable(this);
+		this.on('stagemouseup', function (event) {
+			// @ts-ignore
+			if (!event.relatedTarget) {
+				BitmapEditable.boundingBox = null;
+				TextureEditable.boundingBox = null;
+			}
+		});
 
-    const backgroundImage = new Image();
-    backgroundImage.src = backgroundDataURI;
-    backgroundImage.onload = () => {
-      let bitmap = new createjs.Bitmap(backgroundImage);
-      const width = backgroundImage.width;
-      this.regX = width / 2;
-      this.totalWidth = width;
-      this.changePositionX(400);
-      store.dispatch(setMixTotalWidth(width));
-      this.addChild(bitmap);
-      this.init();
-      MainStage.currentStage = this;
-      ListObjectThumbnail.resetState();
-    };
-  }
+		createjs.Touch.enable(this);
 
-  init() {
-    this.containerTextures = new createjs.Container();
-    this.containerObjects = new createjs.Container();
+		const backgroundImage = new Image();
+		backgroundImage.src = backgroundDataURI;
+		backgroundImage.onload = () => {
+			let bitmap = new createjs.Bitmap(backgroundImage);
+			const width = backgroundImage.width;
+			this.regX = width / 2;
+			this.totalWidth = width;
+			this.changePositionX(400);
+			// store.dispatch(setMixTotalWidth(width));
+			this.addChild(bitmap);
+			this.init();
+			MainStage.currentStage = this;
+			ListObjectThumbnail.resetState();
+		};
+	}
 
-    this.addChild(this.containerTextures);
-    this.addChild(this.containerObjects);
+	init() {
+		this.containerTextures = new createjs.Container();
+		this.containerObjects = new createjs.Container();
 
-    BitmapEditable.parent = this.containerObjects;
-    TextureEditable.parent = this.containerTextures;
+		this.addChild(this.containerTextures);
+		this.addChild(this.containerObjects);
 
-    if (this.serialized) {
-      this.drawSerializedStage(this.serialized);
-    }
-  }
+		BitmapEditable.parent = this.containerObjects;
+		TextureEditable.parent = this.containerTextures;
 
-  changePositionX(value) {
-    this.x = value;
-    this.update();
-    store.dispatch(setMixPositionX(value));
-  }
+		if (this.serialized) {
+			this.drawSerializedStage(this.serialized);
+		}
+	}
 
-  toDataURL() {
-    BitmapEditable.boundingBox = null;
-    TextureEditable.boundingBox = null;
-    this.update();
-    return this.canvas.toDataURL("image/jpeg", 0.8);
-  }
+	changePositionX(value: number) {
+		this.x = value;
+		this.update();
+		// store.dispatch(setMixPositionX(value));
+	}
 
-  serializeStage() {
-    const objectsChildren = this.containerObjects.children;
-    const texturesChildren = this.containerTextures.children;
+	toDataURL() {
+		BitmapEditable.boundingBox = null;
+		TextureEditable.boundingBox = null;
+		this.update();
+		return (this.canvas as HTMLCanvasElement).toDataURL('image/jpeg', 0.8);
+	}
 
-    const textures = texturesChildren
-      .filter((obj) => obj.type === "TextureEditable")
-      .map((obj) => ({
-        filename: obj.image.src.substring(
-          obj.image.src.lastIndexOf("/") + 1,
-          obj.image.src.lastIndexOf(".png"),
-        ),
-        instructions: obj.customMask.graphics._activeInstructions,
-        position: {
-          x: obj.customMask.x,
-          y: obj.customMask.y,
-        },
-      }));
+	serializeStage() {
+		const objectsChildren = this.containerObjects!.children;
+		const texturesChildren = this.containerTextures!.children;
 
-    const objects = objectsChildren
-      .filter((obj) => obj.type === "BitmapEditable")
-      .map((obj) => ({
-        filename: obj.filename,
-        position: {
-          x: obj.x,
-          y: obj.y,
-        },
-        scale: {
-          x: obj.scaleX,
-          y: obj.scaleY,
-        },
-      }));
+		const textures = texturesChildren
+			// @ts-ignore
+			.filter((obj): obj is TextureEditable => obj.type === 'TextureEditable')
+			.map((obj) => ({
+				filename: obj.image!.src.substring(
+					obj.image!.src.lastIndexOf('/') + 1,
+					obj.image!.src.lastIndexOf('.png')
+				),
+				// @ts-ignore
+				instructions: obj.customMask.graphics._activeInstructions,
+				position: {
+					x: obj.customMask.x,
+					y: obj.customMask.y
+				}
+			}));
 
-    return {
-      objects,
-      textures,
-      positionX: parseInt(this.x, 10),
-    };
-  }
+		const objects = objectsChildren
+			// @ts-ignore
+			.filter((obj): obj is BitmapEditable => obj.type === 'BitmapEditable')
+			.map((obj) => ({
+				filename: obj.filename,
+				position: {
+					x: obj.x,
+					y: obj.y
+				},
+				scale: {
+					x: obj.scaleX,
+					y: obj.scaleY
+				}
+			}));
 
-  saveSerializedStage() {
-    store.dispatch(setMixSerialized(this.serializeStage()));
-  }
+		return {
+			objects,
+			textures,
+			positionX: parseInt(this.x.toString(), 10)
+		};
+	}
 
-  drawSerializedStage(data) {
-    if (data.textures) {
-      data.textures.map((txtr) => {
-        let texture = new TextureEditable(
-          "/img/textures/" + txtr.filename + ".png",
-          txtr.instructions,
-        );
-        texture.crossOrigin = "anonymous";
-        texture.customMask.x = txtr.position.x;
-        texture.customMask.y = txtr.position.y;
-        return txtr;
-      });
-    }
-    if (data.objects) {
-      data.objects.map((obj) => {
-        let bitmap = new BitmapEditable(
-          "/img/objects/" + obj.filename + ".png",
-        );
-        bitmap.crossOrigin = "anonymous";
-        bitmap.filename = obj.filename;
-        bitmap.x = obj.position.x;
-        bitmap.y = obj.position.y;
-        bitmap.scaleX = obj.scale.x;
-        bitmap.scaleY = obj.scale.y;
-        return obj;
-      });
-    }
-    if (data.positionX) {
-      this.changePositionX(data.positionX);
-    }
-  }
+	saveSerializedStage() {
+		// store.dispatch(setMixSerialized(this.serializeStage()));
+	}
 
-  static set currentStage(stage) {
-    MainStage._currentStage = stage;
-  }
+	drawSerializedStage(data: { textures: any[]; objects: any[]; positionX: number }) {
+		if (data.textures) {
+			data.textures.map((txtr) => {
+				let texture = new TextureEditable(
+					'/img/textures/' + txtr.filename + '.png',
+					txtr.instructions
+				);
+				texture.crossOrigin = 'anonymous';
+				texture.customMask.x = txtr.position.x;
+				texture.customMask.y = txtr.position.y;
+				return txtr;
+			});
+		}
+		if (data.objects) {
+			data.objects.map((obj) => {
+				let bitmap = new BitmapEditable('/img/objects/' + obj.filename + '.png');
+				// @ts-ignore
+				bitmap.crossOrigin = 'anonymous';
+				bitmap.filename = obj.filename;
+				bitmap.x = obj.position.x;
+				bitmap.y = obj.position.y;
+				bitmap.scaleX = obj.scale.x;
+				bitmap.scaleY = obj.scale.y;
+				return obj;
+			});
+		}
+		if (data.positionX) {
+			this.changePositionX(data.positionX);
+		}
+	}
 
-  static get currentStage() {
-    return MainStage._currentStage;
-  }
+	static set currentStage(stage) {
+		MainStage._currentStage = stage;
+	}
+
+	static get currentStage() {
+		return MainStage._currentStage;
+	}
 }

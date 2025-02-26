@@ -14,12 +14,18 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.48.1
         version: 2.48.1
+      '@types/createjs':
+        specifier: ^0.0.32
+        version: 0.0.32
       '@types/easeljs':
         specifier: ^1.0.5
         version: 1.0.5
       axios:
         specifier: ^1.7.9
         version: 1.7.9
+      createjs:
+        specifier: ^1.0.1
+        version: 1.0.1
       easeljs:
         specifier: ^1.0.2
         version: 1.0.2
@@ -596,6 +602,9 @@ packages:
   '@types/createjs-lib@0.0.33':
     resolution: {integrity: sha512-mvK1sn2qSyGPwctg/MsjAP5m3/TBx83eB0hcEdZ6UqpuzQqCUWpVyyQddqkbAsKRpMECK0s7JosYXoTtIuNbhw==}
 
+  '@types/createjs@0.0.32':
+    resolution: {integrity: sha512-MxZH+aP1XLqL5BpPmKmqAUzGaDP6HeMCAPAZpEaF2LbJi8Tm7FnHZ2beOnqLBsPafuq0EFj2mYfKOoaApAAeGA==}
+
   '@types/easeljs@1.0.5':
     resolution: {integrity: sha512-YRWGkZdq4trhJhieE0NdLTbOp5zT5yunPJKNqQJWq/X8y7qlmGeQB8hPnQHzMbW9iY38ZV91oXgW7V3U5VY2uw==}
 
@@ -626,8 +635,14 @@ packages:
   '@types/phoenix@1.6.6':
     resolution: {integrity: sha512-PIzZZlEppgrpoT2QgbnDU+MMzuR6BbCjllj0bM70lWoejMeNJAxCchxnv7J3XFkI8MpygtRpzXrIlmWUBclP5A==}
 
+  '@types/preloadjs@0.6.36':
+    resolution: {integrity: sha512-/Xo6BRCkvZiw0VXHszRQJnnTHyfkISPD5DiMj0JDrmQWiw104BxoijjeIlZ0umQxXEUb+gWLZsdZbuEhmP5vsw==}
+
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
+
+  '@types/soundjs@0.6.31':
+    resolution: {integrity: sha512-5bditJi7P1YbRIRa1UFxIr+8vKJYEc6nTZb5NL0647rWGqGf8Ih4GD+0aDWteWIG17EXPw+VTOQE/8LHitnn4A==}
 
   '@types/symlink-or-copy@1.2.2':
     resolution: {integrity: sha512-MQ1AnmTLOncwEf9IVU+B2e4Hchrku5N67NkgcAHW0p3sdzPe0FNMANxEm6OJUzPniEQGkeT3OROLlCwZJLWFZA==}
@@ -931,6 +946,9 @@ packages:
 
   core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
+
+  createjs@1.0.1:
+    resolution: {integrity: sha512-VutFczgM8GNzOSiFKlYEwFRgZRMQkZt34ooaewKi7lzxuQ7JSsUs/Y1qb95G4CKOnHA/C/yghCJ6wfivuKOawA==}
 
   cross-fetch@4.0.0:
     resolution: {integrity: sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==}
@@ -2898,6 +2916,14 @@ snapshots:
 
   '@types/createjs-lib@0.0.33': {}
 
+  '@types/createjs@0.0.32':
+    dependencies:
+      '@types/createjs-lib': 0.0.33
+      '@types/easeljs': 1.0.5
+      '@types/preloadjs': 0.6.36
+      '@types/soundjs': 0.6.31
+      '@types/tweenjs': 1.0.8
+
   '@types/easeljs@1.0.5':
     dependencies:
       '@types/createjs-lib': 0.0.33
@@ -2927,7 +2953,16 @@ snapshots:
 
   '@types/phoenix@1.6.6': {}
 
+  '@types/preloadjs@0.6.36':
+    dependencies:
+      '@types/createjs-lib': 0.0.33
+
   '@types/resolve@1.20.2': {}
+
+  '@types/soundjs@0.6.31':
+    dependencies:
+      '@types/createjs-lib': 0.0.33
+      '@types/preloadjs': 0.6.36
 
   '@types/symlink-or-copy@1.2.2': {}
 
@@ -3279,6 +3314,8 @@ snapshots:
   cookie@0.7.2: {}
 
   core-util-is@1.0.3: {}
+
+  createjs@1.0.1: {}
 
   cross-fetch@4.0.0:
     dependencies:

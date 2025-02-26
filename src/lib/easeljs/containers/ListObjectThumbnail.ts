@@ -1,14 +1,23 @@
 import ObjectThumbnail from './ObjectThumbnail';
 import ObjectPreview from './ObjectPreview';
 import TexturePreview from './TexturePreview';
-import { METRIC_TAG_COLORS } from '../../config';
-
-let createjs = window.createjs;
 
 export default class ListObjectThumbnail extends createjs.Container {
-	static state = {};
+	static state: { [key: number]: { x: number; itemIndex: number } } = {};
+	static _currentListObjectThumbnail: ListObjectThumbnail;
+	static _background: createjs.Shape;
 
-	constructor(manifest, path, categoryIndex) {
+	padding: number;
+	categoryIndex: number;
+	hasMoved: boolean;
+	mouseDifferenceToOrigin: { x: number } = { x: 0 };
+	static container: ListObjectThumbnail;
+	static currentSelected: ObjectThumbnail;
+	static indicator: createjs.Shape;
+	static objectPreview: ObjectPreview | TexturePreview;
+	static mode: string;
+
+	constructor(manifest: any, path: string, categoryIndex: any) {
 		super();
 		this.padding = 16;
 		this.categoryIndex = categoryIndex;
@@ -33,8 +42,8 @@ export default class ListObjectThumbnail extends createjs.Container {
 		ListObjectThumbnail.currentListObjectThumbnail = this;
 	}
 
-	init(manifest, path) {
-		let preload = new createjs.LoadQueue('true', '/img/');
+	init(manifest: any[], path: string) {
+		let preload = new createjs.LoadQueue(true, '/img/');
 
 		const imageExtensions = path === 'objects' ? 'png' : 'jpg';
 
@@ -47,17 +56,19 @@ export default class ListObjectThumbnail extends createjs.Container {
 			src: `${elt.src}.${imageExtensions}`
 		}));
 
-		const errors = [];
+		const errors: any[] = [];
 
 		preload.loadManifest(manifestIcons);
 		preload.on('fileload', (e) => {
 			this.onFileload(e);
 		});
+
 		preload.on('error', (e) => {
+			// @ts-ignore
 			errors.push(e.data.filename);
 		});
 		preload.on('complete', () => {
-			let preloadBigImages = new createjs.LoadQueue('true', '/img/');
+			let preloadBigImages = new createjs.LoadQueue(true, '/img/');
 			preloadBigImages.loadManifest(manifestImages);
 			preloadBigImages.on('error', (e) => {
 				console.log(errors);
@@ -68,6 +79,7 @@ export default class ListObjectThumbnail extends createjs.Container {
 		});
 	}
 
+	// @ts-ignore
 	onMousedown(e) {
 		ObjectThumbnail.hasMoved = false;
 		this.mouseDifferenceToOrigin = {
@@ -75,6 +87,7 @@ export default class ListObjectThumbnail extends createjs.Container {
 		};
 	}
 
+	// @ts-ignore
 	onPressmove(e) {
 		if (Math.abs(e.stageX - this.mouseDifferenceToOrigin.x) > 30) {
 			ObjectThumbnail.hasMoved = true;
@@ -82,6 +95,7 @@ export default class ListObjectThumbnail extends createjs.Container {
 		this.x = e.stageX - this.mouseDifferenceToOrigin.x;
 	}
 
+	// @ts-ignore
 	onPressup(e) {
 		if (ObjectThumbnail.hasMoved || Math.abs(e.stageX - this.mouseDifferenceToOrigin.x) > 0) {
 			const x = this.x;
@@ -108,6 +122,7 @@ export default class ListObjectThumbnail extends createjs.Container {
 		}
 	}
 
+	// @ts-ignore
 	onFileload(e) {
 		let background = ListObjectThumbnail._background;
 
@@ -121,9 +136,11 @@ export default class ListObjectThumbnail extends createjs.Container {
 
 		let bitmap = new ObjectThumbnail(e.result, item, this);
 
+		//@ts-ignore
 		bitmap.x = background.graphics.command.w + 10;
 		bitmap.y = 10;
 
+		//@ts-ignore
 		background.graphics.command.w += 100;
 		this.addChild(bitmap);
 
@@ -164,13 +181,13 @@ export default class ListObjectThumbnail extends createjs.Container {
 				bitmap.x + 40 - (metricTags.length * metricIndicatorWidth) / 2 + i * metricIndicatorWidth;
 			const metricTagIndicator = new createjs.Shape();
 			metricTagIndicator.graphics
-				.beginFill(METRIC_TAG_COLORS[metricTags[i]])
+				.beginFill('#292929') // TODO: match with metricColors
 				.drawRoundRectComplex(metricIndicatorX, 105, metricIndicatorWidth, 5, 3, 3, 0, 0);
 			this.addChild(metricTagIndicator);
 		}
 	}
 
-	saveState(itemIndex) {
+	saveState(itemIndex: number) {
 		ListObjectThumbnail.state[this.categoryIndex] = {
 			x: this.x,
 			itemIndex

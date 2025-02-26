@@ -22,100 +22,93 @@ You should have received a copy of the GNU Affero General Public License
 along with Unlimited Cities®. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import ListObjectThumbnail from "../containers/ListObjectThumbnail";
-import BitmapEditable from "../containers/BitmapEditable";
-import TextureEditable from "../containers/TextureEditable";
+import ListObjectThumbnail from '../containers/ListObjectThumbnail';
+import BitmapEditable from '../containers/BitmapEditable';
+import TextureEditable from '../containers/TextureEditable';
 
-import { store } from "../../store";
-
-let createjs = window.createjs;
 export default class ToolsStage extends createjs.Stage {
-  constructor(canvasId, categoryIndex) {
-    super(canvasId);
-    this.canvasId = canvasId;
-    createjs.Touch.enable(this);
-    createjs.Ticker.on("tick", (e) => {
-      this.update(e);
-    });
+	private _listObjectThumbnail: ListObjectThumbnail | undefined;
+	private _backgroundContainer: createjs.Container | undefined;
+	private canvasId: string;
+	static _currentStage: ToolsStage | null;
 
-    BitmapEditable.boundingBox = null;
-    TextureEditable.boundingBox = null;
+	constructor(canvasId: string, categoryIndex: string | number) {
+		super(canvasId);
+		this.canvasId = canvasId;
+		createjs.Touch.enable(this);
+		createjs.Ticker.on('tick', (e) => {
+			this.update(e);
+		});
 
-    let rectangle = new createjs.Shape();
-    rectangle.graphics.beginFill("black").drawRect(0, 0, 800, 600);
+		BitmapEditable.boundingBox = null;
+		TextureEditable.boundingBox = null;
 
-    let backgroundContainer = new createjs.Container();
-    backgroundContainer.addChild(rectangle);
+		let rectangle = new createjs.Shape();
+		rectangle.graphics.beginFill('black').drawRect(0, 0, 800, 600);
 
-    this.addChild(backgroundContainer);
+		let backgroundContainer = new createjs.Container();
+		backgroundContainer.addChild(rectangle);
 
-    let background_img = new Image();
-    background_img.src = document.getElementById("mainStage").toDataURL();
-    background_img.onload = () => {
-      let background = new createjs.Bitmap(background_img);
-      let blurFilter = new createjs.BlurFilter(30, 30, 2);
-      let bounds = blurFilter.getBounds();
-      background.filters = [blurFilter];
-      background.cache(
-        bounds.x,
-        bounds.y,
-        800 + bounds.width,
-        600 + bounds.height,
-      );
-      backgroundContainer.addChild(background);
+		this.addChild(backgroundContainer);
 
-      let data = store.getState().library.data;
+		let background_img = new Image();
+		// @ts-ignore
+		background_img.src = document.getElementById('mainStage')!.toDataURL();
+		background_img.onload = () => {
+			let background = new createjs.Bitmap(background_img);
+			let blurFilter = new createjs.BlurFilter(30, 30, 2);
+			let bounds = blurFilter.getBounds();
+			background.filters = [blurFilter];
+			background.cache(bounds.x, bounds.y, 800 + bounds.width, 600 + bounds.height);
+			backgroundContainer.addChild(background);
 
-      const path =
-        data[categoryIndex].type === "objects" ? "objects" : "textures";
+			// let data = store.getState().library.data;
 
-      const manifest = data[categoryIndex].collection.map((elt) => {
-        elt.src = path + "/" + elt.filename;
-        elt.mode = path;
-        return elt;
-      });
+			// const path = data[categoryIndex].type === 'objects' ? 'objects' : 'textures';
 
-      let listObjectThumbnail = new ListObjectThumbnail(
-        manifest,
-        path,
-        categoryIndex,
-      );
-      this.addChild(listObjectThumbnail);
-      this.init();
+			// const manifest = data[categoryIndex].collection.map((elt) => {
+			// 	elt.src = path + '/' + elt.filename;
+			// 	elt.mode = path;
+			// 	return elt;
+			// });
 
-      this.listObjectThumbnail = listObjectThumbnail;
+			let listObjectThumbnail = new ListObjectThumbnail([], 'objects', categoryIndex);
+			this.addChild(listObjectThumbnail);
+			this.init();
 
-      this.backgroundContainer = backgroundContainer;
-      ToolsStage.currentStage = this;
-    };
-  }
+			this.listObjectThumbnail = listObjectThumbnail;
 
-  init() {
-    document.getElementById(this.canvasId).style.display = "block";
-    document.getElementById(this.canvasId).style.animation = "showTools 0.5s 1";
-  }
+			this.backgroundContainer = backgroundContainer;
+			ToolsStage.currentStage = this;
+		};
+	}
 
-  set listObjectThumbnail(list) {
-    this._listObjectThumbnail = list;
-  }
+	init() {
+		document.getElementById(this.canvasId)!.style.display = 'block';
+		document.getElementById(this.canvasId)!.style.animation = 'showTools 0.5s 1';
+	}
 
-  get listObjectThumbnail() {
-    return this._listObjectThumbnail;
-  }
+	set listObjectThumbnail(list) {
+		this._listObjectThumbnail = list;
+	}
 
-  set backgroundContainer(backgroundContainer) {
-    this._backgroundContainer = backgroundContainer;
-  }
+	get listObjectThumbnail() {
+		return this._listObjectThumbnail;
+	}
 
-  get backgroundContainer() {
-    return this._backgroundContainer;
-  }
+	set backgroundContainer(backgroundContainer) {
+		this._backgroundContainer = backgroundContainer;
+	}
 
-  static set currentStage(stage) {
-    ToolsStage._currentStage = stage;
-  }
+	get backgroundContainer() {
+		return this._backgroundContainer;
+	}
 
-  static get currentStage() {
-    return ToolsStage._currentStage;
-  }
+	static set currentStage(stage) {
+		ToolsStage._currentStage = stage;
+	}
+
+	static get currentStage() {
+		return ToolsStage._currentStage;
+	}
 }

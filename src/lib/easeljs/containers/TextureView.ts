@@ -1,61 +1,46 @@
-/*
-Path : /src/easeljs/containers
+import GalleryStage from '../stages/GalleryStage';
 
-Copyright (C) 2019 | Unlimited Cities® | Alain Renk | <alain.renk@7-bu.org>
-
-Developer: Nicoals Ancel <email@adress>
-Supported by: https://7billion-urbanists.org/ and https://freeit.world
-
-This file is part of Unlimited Cities® software.
-
-Unlimited Cities® is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Unlimited Cities® is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with Unlimited Cities®. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-import GalleryStage from "../stages/GalleryStage";
-
-let createjs = window.createjs;
 export default class TextureView extends createjs.Container {
-  constructor(imageOrUri, instructions) {
-    super(imageOrUri);
+	static parent: createjs.Container;
+	static background: createjs.Shape = new createjs.Shape();
+	static oldObject: createjs.Bitmap | null = null;
 
-    this.x = 0;
-    this.y = 0;
+	x: number;
+	y: number;
+	image: HTMLImageElement | undefined;
+	customMask: createjs.Shape;
+	crossOrigin: string = '';
 
-    var image = new Image();
-    image.src = imageOrUri;
-    image.onload = () => {
-      var shape = new createjs.Shape();
-      shape.graphics.beginBitmapFill(image, "repeat-x");
-      shape.graphics.drawRect(0, 0, GalleryStage.currentStage.totalWidth, 600);
-      this.image = image;
-      this.addChild(shape);
-    };
+	constructor(imageOrUri: string, instructions: any[]) {
+		super();
 
-    this.customMask = new createjs.Shape();
-    this.customMask.graphics.setStrokeStyle(1);
+		this.x = 0;
+		this.y = 0;
 
-    if (instructions) {
-      instructions.map((elt, index) => {
-        if (index === 0) {
-          this.customMask.graphics.moveTo(elt.x, elt.y);
-        } else {
-          this.customMask.graphics.lineTo(elt.x, elt.y);
-        }
-        return elt;
-      });
-      TextureView.parent.addChild(this);
-      this.mask = this.customMask;
-    }
-  }
+		var image = new Image();
+		image.src = imageOrUri;
+		image.onload = () => {
+			var shape = new createjs.Shape();
+			shape.graphics.beginBitmapFill(image, 'repeat-x');
+			shape.graphics.drawRect(0, 0, GalleryStage.currentStage!.totalWidth, 600);
+			this.image = image;
+			this.addChild(shape);
+		};
+
+		this.customMask = new createjs.Shape();
+		this.customMask.graphics.setStrokeStyle(1);
+
+		if (instructions) {
+			instructions.map((elt, index) => {
+				if (index === 0) {
+					this.customMask.graphics.moveTo(elt.x, elt.y);
+				} else {
+					this.customMask.graphics.lineTo(elt.x, elt.y);
+				}
+				return elt;
+			});
+			TextureView.parent.addChild(this);
+			this.mask = this.customMask;
+		}
+	}
 }
