@@ -1,6 +1,7 @@
 import MainStage from '../stages/MainStage';
 import BitmapEditable from './BitmapEditable';
 import type TextureEditable from './TextureEditable';
+const createjs = window.createjs;
 
 export default class TransformBox extends createjs.Container {
 	object: BitmapEditable | TextureEditable;

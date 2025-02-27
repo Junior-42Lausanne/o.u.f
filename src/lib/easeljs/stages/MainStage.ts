@@ -1,6 +1,7 @@
 import BitmapEditable from '../containers/BitmapEditable';
 import ListObjectThumbnail from '../containers/ListObjectThumbnail';
 import TextureEditable from '../containers/TextureEditable';
+const createjs = window.createjs;
 
 export default class MainStage extends createjs.Stage {
 	serialized: any;

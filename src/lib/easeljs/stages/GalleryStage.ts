@@ -1,5 +1,6 @@
 import BitmapView from '../containers/BitmapView';
 import TextureView from '../containers/TextureView';
+const createjs = window.createjs;
 
 export default class GalleryStage extends createjs.Stage {
 	serialized: any;

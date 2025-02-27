@@ -1,6 +1,7 @@
 import ToolsStage from '../stages/ToolsStage';
 import MainStage from '../stages/MainStage';
 import TextureEditable from './TextureEditable';
+const createjs = window.createjs;
 
 export default class TexturePreview extends createjs.Container {
 	constructor(imagePath: string) {

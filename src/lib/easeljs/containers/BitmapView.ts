@@ -1,4 +1,5 @@
 import GalleryStage from '../stages/GalleryStage';
+const createjs = window.createjs;
 
 export default class BitmapView extends createjs.Bitmap {
 	static parent: createjs.Container;

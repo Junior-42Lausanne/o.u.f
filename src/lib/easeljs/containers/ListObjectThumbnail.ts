@@ -1,6 +1,7 @@
 import ObjectThumbnail from './ObjectThumbnail';
 import ObjectPreview from './ObjectPreview';
 import TexturePreview from './TexturePreview';
+const createjs = window.createjs;
 
 export default class ListObjectThumbnail extends createjs.Container {
 	static state: { [key: number]: { x: number; itemIndex: number } } = {};

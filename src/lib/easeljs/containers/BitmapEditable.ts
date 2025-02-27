@@ -2,6 +2,8 @@ import MainStage from '../stages/MainStage';
 import TransformBox from './TransformBox';
 import TextureEditable from './TextureEditable';
 
+const createjs = window.createjs;
+
 export default class BitmapEditable extends createjs.Bitmap {
 	private static _boundingBox: TransformBox | null;
 	type: string;
@@ -56,9 +58,9 @@ export default class BitmapEditable extends createjs.Bitmap {
 	onPressup(e) {
 		if (e.rawX < 5 || e.rawX > 795 || e.rawY < 5 || e.rawY > 595) {
 			this.parent.removeChild(this);
-			MainStage.currentStage.saveSerializedStage();
+			MainStage.currentStage!.saveSerializedStage();
 		} else {
-			MainStage.currentStage.saveSerializedStage();
+			MainStage.currentStage!.saveSerializedStage();
 			BitmapEditable.displayBoundingBox(this);
 		}
 	}
@@ -88,7 +90,7 @@ export default class BitmapEditable extends createjs.Bitmap {
 		if (box) BitmapEditable.parent.addChild(box);
 	}
 
-	static displayBoundingBox(bitmap: createjs.Bitmap) {
+	static displayBoundingBox(bitmap: BitmapEditable) {
 		let transformBox = new TransformBox(bitmap);
 		BitmapEditable.boundingBox = transformBox;
 		BitmapEditable.parent.addChild(transformBox);

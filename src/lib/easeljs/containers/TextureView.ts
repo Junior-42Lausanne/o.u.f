@@ -1,4 +1,5 @@
 import GalleryStage from '../stages/GalleryStage';
+const createjs = window.createjs;
 
 export default class TextureView extends createjs.Container {
 	static parent: createjs.Container;

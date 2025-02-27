@@ -1,6 +1,7 @@
 import type ListObjectThumbnail from './ListObjectThumbnail';
 import ObjectPreview from './ObjectPreview';
 import TexturePreview from './TexturePreview';
+const createjs = window.createjs;
 
 export default class ObjectThumbnail extends createjs.Bitmap {
 	static _currentSelected: ObjectThumbnail;

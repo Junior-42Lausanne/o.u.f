@@ -2,6 +2,7 @@ import MainStage from '../stages/MainStage';
 
 import ToolsStage from '../stages/ToolsStage';
 import BitmapEditable from '../containers/BitmapEditable';
+const createjs = window.createjs;
 
 const marginTop = 85;
 
